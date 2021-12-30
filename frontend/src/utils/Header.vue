@@ -1,4 +1,5 @@
 <template>
+<div>
     <header>
        
         <div class="" :class="{teste: isActive}">
@@ -28,7 +29,7 @@
                     <!-- <span class="text-white spannav">Toggleable via the navbar brand.</span> -->
                 </nav>
             </div>
-        <router-view/>
+        
         <!-- <nav class="navbar navbar-dark bg-dark" id="navheaderblack">
             <button class="navbar-toggler" @click="clicou()" @dblclick="clicoudnv()" type="button" aria-label="Toggle navigation" style="margin-left: 1%;">
                 <span class="navbar-toggler-icon"></span>
@@ -36,6 +37,7 @@
         </nav> -->
     </div>
     </header>
+</div>
 </template>
 <script>
     import { logOutMixin } from '@/mixins.js'

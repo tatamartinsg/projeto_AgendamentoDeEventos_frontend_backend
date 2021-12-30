@@ -7,9 +7,15 @@
                     <button @click="addEvent()" class="btn btn-dark">Add Event</button>
                 </div>
             </div>
+            <div align="center" :class="{confirm: confirm}">
+                <h2>Confirme sua senha antes de enviar</h2>
+                <input class="form-control w-50" type="password" v-model="passwordConfirm" />
+                <button @click.prevent="clicou()" class="btn btn-warning">Confirma Senha</button>
+            </div>
             <section id="addEvent" :class="{ isActiveAddEvent: isActiveAddEvent, transitionEvent: transitionEvent}">
                 <h2 class="myevent-title">Add Event</h2>
-                <div>
+                <hr>
+                <div class="div">
                     <form class="formEvent">
                         <div class="name-date">
                             <div class="form-group row">
@@ -65,10 +71,12 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
             return{
                 isActiveAddEvent: true,
                 transitionEvent: false,
+                confirm: true,
                 name:'',
                 date:'',
                 description:'',
-                check:''
+                check:'',
+                passwordConfirm: ''
             }
         },
         mounted(){
@@ -83,29 +91,47 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                 this.isActiveAddEvent =! this.isActiveAddEvent
                 this.transitionEvent =! this.transitionEvent
             },
-            formParams(){
+            formParams(passConfirm){
                 const objeto = {
                     name: this.name,
                     dateEvent: this.date,
                     dateCreated: EventGetDate(),
                     description: this.description,
                     check: this.check,
-                    idUserLogged: provedor.state._idUser
+                    idUserLogged: provedor.state._idUser,
+                    passConfirm: passConfirm
                 }
                 return objeto
             },
+            clicou(){
+                 if(this.passwordConfirm){
+                    // var senha = prompt("Confirme sua senha, por favor")
+                    // console.log(senha)
+                    // let formEvent = '.formEvent'
+                    console.log(this.passwordConfirm) //PELO AMOR DE DEUS DPOS DA UM JEITO DE VERIFICAR SE ISSO TA CERTO
+                    this.$http.post('/addEvent', this.formParams(this.passwordConfirm))
+                    .then((response) =>{
+                        console.log(response.data.check)
+                        if(response.data.check == true){
+                            this.sendEmailAoBackEnd(response.data)
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                    setTimeout(() => {
+                        this.confirm = true
+                    },1000 )
+                    
+                }
+            },
             submitEvent(){
-                alert('clicou')
-                // let formEvent = '.formEvent'
-                this.$http.post('/addEvent', this.formParams())
-                .then((response) =>{
-                    console.log(response)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-                
-            }
+                this.confirm =! this.confirm
+               
+            },
+            // sendEmailAoBackEnd(){
+            //     this.$http.po
+            // }
         }
     
     }
@@ -126,13 +152,13 @@ button{
 .div-mySchedule{
     display: flex;
     margin: 40px;
+    margin-bottom: 20px;
 }
 .schedule-title,.myevent-title{
     color: rgb(0, 0, 0);
 }
 .myevent-title{
-    margin-left: 40px;
-    margin-top: 30px;
+    margin: 30px 0px 40px 40px;
 }
 .div-addevent{
     justify-content: right;
@@ -142,13 +168,19 @@ button{
     width: 200px;
     margin-left: 100%;
 }
-
+/* .myevent-title{
+    font-weight: bold;
+} */
 #addEvent{
-    border: 2px solid black;
+    border: 2px solid rgb(41, 40, 40);
+    box-shadow: 3px 4px 10px rgb(179, 179, 179);
+    border-radius: 10px;
     padding: 10px;
     margin: 40px;
-    background-color: #d3f090;
+    background-color: #ffffff;
     width: 95%;
+    color: rgb(10, 10, 10);
+    font-weight: bold;
 }
 
 .input-name{
@@ -177,5 +209,8 @@ button{
  }
  .addEventSubmit {
      margin-right: 20px;
+ }
+ .confirm{
+     display: none;
  }
 </style>

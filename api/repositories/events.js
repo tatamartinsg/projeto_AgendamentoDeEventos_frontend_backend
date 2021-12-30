@@ -13,6 +13,10 @@ class Events{
         const sql = `SELECT * FROM schedule_event WHERE emailID = '${getId}';`
         return query(sql,getId)
     }
+    deleteEvent(id_delete){
+        const sql = `DELETE FROM schedule_event WHERE id_schedule = '${id_delete}';`
+        return query(sql,id_delete)
+    }
 }
 
 module.exports = new Events

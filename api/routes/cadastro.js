@@ -2,14 +2,25 @@ const Cadastro = require('../models/cadastroBD')
 const Select = require('../models/selectDB')
 const CadastroController = require('../controllers/encryptPassword')
 const jwt = require('jsonwebtoken')
+const Email = require('../config/email.js')
 
 module.exports = app => {
     app.get('/',(req,res)=>{
         res.send()
     })
     app.get('/all-cadastros', (req,res) => {
+        // const email = 'tassiamaggv929@hotmail.com'
+        // Email.sendEmail(email)
+        const infoEmail = [
+            {
+                nameEvent
+            }
+        ]
         Cadastro.selecionaUsuarios()
             .then (resultados_select => {
+                for(var i =0; i< resultados_select.length; i++){
+                    console.log(resultados_select[i].email)
+                }
                 res.status(200).send(resultados_select)
             })
             .catch(erro_select => {
@@ -28,7 +39,6 @@ module.exports = app => {
                 else{
                     res.status(200).send(resultados)
                 }
-                
             })
             .catch(erro => {
                 res.status(400).send('Erro id', erro)

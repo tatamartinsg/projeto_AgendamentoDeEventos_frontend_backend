@@ -1,10 +1,11 @@
 <template>
   <div>
+    <my-header/>
     <div id="app">
-      <my-header></my-header>
-      <!-- <transition name="page">
+      
+      <transition name="page">
          <router-view></router-view>
-      </transition> -->
+      </transition>
     </div>
   </div>
 </template>
@@ -30,5 +31,7 @@ export default {
 </script>
 
 <style>
-
+  #app{
+    margin-top: 8%;
+  }
 </style>
