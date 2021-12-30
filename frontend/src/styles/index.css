@@ -1,0 +1,95 @@
+html {
+  height: 100%;
+}
+body {
+  min-width: 550px;
+  height: 100%;
+  background-color: rgb(241, 241, 241);
+}
+.container {
+  background-color: thistle;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  height: 80%;
+  border-radius: 50px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.firstdiv,
+.firstdiv2 {
+  width: 50%;
+  background-color: #58af9b;
+  text-align: center;
+  border-radius: 50px 0px 0px 50px;
+}
+
+.seconddiv,
+.thirddiv {
+  width: 50%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 0px 50px 50px 0px;
+}
+.second-filho {
+  text-align: center;
+  margin-top: 10%;
+}
+.first-filho {
+  margin-top: 15%;
+}
+.form {
+  justify-content: center;
+  display: inline-grid;
+  margin-left: 20px;
+}
+.btn {
+  padding: 10px;
+  margin-top: 20px;
+}
+.fab {
+  border: 1px solid rgb(207, 190, 190);
+  padding: 5px;
+  border-radius: 20px;
+  margin: 2%;
+}
+label {
+  padding: 12px;
+}
+i.far {
+  display: flex;
+}
+input {
+  margin: 2%;
+}
+h1 {
+  color: white;
+  font-weight: bold;
+}
+h1.create-account {
+  color: #16704f;
+}
+
+.displayNONE {
+  display: none;
+}
+
+button#signIN,
+#signUP {
+  margin-bottom: 50px;
+}
+
+#sign-in-welcome,
+#sign-UP-welcome {
+  width: 250px;
+}
+#sign-in-welcome:hover {
+  background-color: rgb(255, 255, 255);
+}
