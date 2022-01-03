@@ -14,6 +14,10 @@ class Cadastro{
         const sql = `INSERT INTO signUP_users SET ?;`
         return query(sql,body)
     }
+    deletaUsers(id){
+        const sql = `DELETE FROM signUP_users WHERE id = '${id}';`
+        return query(sql)
+    }
 }
 
 module.exports = new Cadastro

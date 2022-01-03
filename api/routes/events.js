@@ -1,7 +1,6 @@
 const verifyJWT = require('../middleware/login')
 const EventsBD = require('../repositories/events.js')
-const Cadastro = require('../repositories/cadastro.js')
-const Email = require('../config/email.js')
+const AddEvent = require('../controllers/eventsControl/addEvent.js')
 
 module.exports = app => {
     app.get('/clientes', verifyJWT, async(req,res) => {
@@ -9,40 +8,11 @@ module.exports = app => {
         res.status(200).json({id: req._idUser, message: 'ok'})
     })
     app.post('/addEvent', async(req,res) => {
-        console.log("entrou post", req.body)
-        EventsBD.addEvent(req.body)
-            .then(response => {
-                if(req.body.check == true){
-                    console.log(req.body.check)
-                    Cadastro.selecionaUsuarios()
-                        .then(res => {
-                            var EmailRemetente = ""
-                            var NomeRemetente = ""
-                            var AllEmails = []
-                            
-                            for(var j = 0; j< res.length; j++){
-                                if(res[j].id == req.body.idUserLogged){
-                                    var index = j
-                                    EmailRemetente = `${res[index].email}`
-                                    NomeRemetente = `${res[index].name}`
-                                }
-                                else{
-                                    AllEmails.push(res[j].email)
-                                }
-                            }
-                            Email.sendEmail(EmailRemetente, NomeRemetente, AllEmails, req.body)
-                            // Email.sendEmail(res,req.body)
-                            // console.log(EmailRemetente, NomeRemetente, AllEmails)
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                }
-                res.status(200).json(req.body)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        if(req.body.name.length == 0 || req.body.description.length == 0  || req.body.dateEvent.length == 0 ){
+            return res.status(400).json({message: 'An input is empty', status: 'empty'})
+        }
+        AddEvent(req,res)
+
         
     })
     app.get('/allEvents/:id', async(req,res)=>{

@@ -7,11 +7,11 @@
                     <button @click="addEvent()" class="btn btn-dark">Add Event</button>
                 </div>
             </div>
-            <div align="center" :class="{confirm: confirm}">
+            <!-- <div align="center" :class="{confirm: confirm}">
                 <h2>Confirme sua senha antes de enviar</h2>
                 <input class="form-control w-50" type="password" v-model="passwordConfirm" />
                 <button @click.prevent="clicou()" class="btn btn-warning">Confirma Senha</button>
-            </div>
+            </div> -->
             <section id="addEvent" :class="{ isActiveAddEvent: isActiveAddEvent, transitionEvent: transitionEvent}">
                 <h2 class="myevent-title">Add Event</h2>
                 <hr>
@@ -81,7 +81,12 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
         },
         mounted(){
             this.$http.get('clientes')
-                .then(response => console.log('Entrou', response))
+                .then(response => {
+                    console.log('Entrou', response)
+                    if(response.data.message == 'token invalid'){
+                        alert("Token invalido")
+                    }
+                })
                 .catch(error => console.log(error))
             console.log(provedor.state._idUser)
             console.log(EventGetDate)
@@ -91,7 +96,7 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                 this.isActiveAddEvent =! this.isActiveAddEvent
                 this.transitionEvent =! this.transitionEvent
             },
-            formParams(passConfirm){
+            formParams(){
                 const objeto = {
                     name: this.name,
                     dateEvent: this.date,
@@ -99,36 +104,59 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                     description: this.description,
                     check: this.check,
                     idUserLogged: provedor.state._idUser,
-                    passConfirm: passConfirm
                 }
                 return objeto
             },
-            clicou(){
-                 if(this.passwordConfirm){
-                    // var senha = prompt("Confirme sua senha, por favor")
-                    // console.log(senha)
-                    // let formEvent = '.formEvent'
-                    console.log(this.passwordConfirm) //PELO AMOR DE DEUS DPOS DA UM JEITO DE VERIFICAR SE ISSO TA CERTO
-                    this.$http.post('/addEvent', this.formParams(this.passwordConfirm))
+            // clicou(){
+            //      if(this.passwordConfirm){
+            //         // var senha = prompt("Confirme sua senha, por favor")
+            //         // console.log(senha)
+            //         // let formEvent = '.formEvent'
+            //         console.log(this.passwordConfirm) //PELO AMOR DE DEUS DPOS DA UM JEITO DE VERIFICAR SE ISSO TA CERTO
+            //         this.$http.post('/addEvent', this.formParams(this.passwordConfirm))
+            //         .then((response) =>{
+            //             console.log(response.data.check)
+            //             if(response.data.check == true){
+            //                 this.sendEmailAoBackEnd(response.data)
+            //             }
+            //         })
+            //         .catch((error) => {
+            //             console.log(error)
+            //         })
+            //         setTimeout(() => {
+            //             this.confirm = true
+            //         },1000 )
+                    
+            //     }
+            // },
+            submitEvent(){
+                this.confirm =! this.confirm
+                this.$http.post('/addEvent', this.formParams())
                     .then((response) =>{
-                        console.log(response.data.check)
+                        this.$toastr('success','Event was added with successful','Event Added')
+                        console.log(response)
+                        document.querySelector('.formEvent').reset();
+                       
+
                         if(response.data.check == true){
                             this.sendEmailAoBackEnd(response.data)
                         }
                     })
                     .catch((error) => {
-                        console.log(error)
+                        console.log(error.response)
+                        if(error.response.data.status == 'empty'){
+                            this.$toastr('warning',error.response.data.message,'Invalid Event')
+                        }
                     })
                     setTimeout(() => {
                         this.confirm = true
                     },1000 )
-                    
-                }
             },
-            submitEvent(){
-                this.confirm =! this.confirm
-               
-            },
+            // clearForm(){
+            //     this.name = ''
+            //     this.description = ''
+            //     this.check = ''
+            // }
             // sendEmailAoBackEnd(){
             //     this.$http.po
             // }

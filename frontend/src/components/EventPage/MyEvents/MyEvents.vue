@@ -68,12 +68,16 @@
                     this.$http.get(`/allEvents/${provedor.state._idUser}`)
                         .then(response => {
                             this.allEvents = response.data
+                            if(response.data.length == 0 ){
+                                return this.$toastr('warning', 'There is no events to be shown', 'Events are empty')
+                            }
+                        
                         })
                         .catch( error => {
                             console.log(error)
                         })
                 }
-                this.clickOnce = true
+                // this.clickOnce = true
                    
                
             },

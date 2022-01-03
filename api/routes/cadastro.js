@@ -1,8 +1,5 @@
 const Cadastro = require('../models/cadastroBD')
-const Select = require('../models/selectDB')
-const CadastroController = require('../controllers/encryptPassword')
-const jwt = require('jsonwebtoken')
-const Email = require('../config/email.js')
+const postSignUp = require('../controllers/signUP/postSignUp.js')
 
 module.exports = app => {
     app.get('/',(req,res)=>{
@@ -54,59 +51,19 @@ module.exports = app => {
     app.post('/cadastro', (req,res)=>{
         //FAZER VERIFICAÇÕES DE SEGURANÇA DE CADASTRO
             //SE VIER VAZIO, ETC...
-
-        console.log("entrou post cadastro")
-        console.log('req params:',req.body)
-        const body = {
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password
-        }
-        let tamanho_email = body.email.length
-        let tamanho_senha = body.password.length
-        let aux;
-        if (tamanho_email >= 12){
-            if(tamanho_senha >= 5){
-                Select.selecionaEmail(body)
-                    .then(resultados => {
-                        for (var i=0; i<resultados.length; i++){
-                            if(resultados[i].email == body.email){
-                                aux = 0
-                            }
-                            else{
-                                aux = 1 
-                            }
-                        }
-                        if(aux == 0){
-                            console.log("Já existe esse email cadastrado!")
-                            res.status(400).json({message: 'Email existente!'})
-                        }
-                        else{
-                            CadastroController.EncryptPassword(body)
-                                .then(resultadosPassword => {
-                                        res.status(200).json({message: 'Cadastrado com sucesso!'})
-                                })  
-                                .catch(erros =>{
-                                    console.log(erros)
-                                    res.status(400).json(erros)
-                                })
-                        }
-                    })
-                    .catch(erros =>{
-                        console.log(erros)
-                        res.status(400).json(erros)
-                    })
-            }
-            else{
-                console.log("Caracteres na senha são insuficientes (menor que 5)")
-                res.status(400).json({message:"Caracteres na SENHA são insuficientes (menor que 5)"})
-            }
-        }
-        else{
-            console.log("Caracteres no email são insuficientes (menor que 12)")
-            res.status(400).json({message:"Email inválido!", erro: 'Caracteres no email são insuficientes (menor que 12)'})
-        }
+        postSignUp(req,res)
     
+     })
+
+     app.delete('/cadastro/:id', (req,res) => {
+         Cadastro.deletaUsers(req.params.id)
+         .then(response => {
+             res.status(200).json({message: "the id was deleted with successful"})
+         })
+         .catch(error => {
+             console.log(error)
+             res.status(400).json({error: "couldn't delete the id inserted"})
+         })
      })
 
 }

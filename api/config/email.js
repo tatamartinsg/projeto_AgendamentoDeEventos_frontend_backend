@@ -1,44 +1,39 @@
 const nodemailer = require('nodemailer')
 
 class Email{
-    sendEmail(EmailRemetente, NomeRemetente, AllEmails, infoEvent){
-        console.log(EmailRemetente,NomeRemetente,AllEmails)
+    sendEmail(message, AllEmails){
+        console.log(AllEmails)
         const sendEmailFixo = 'teste4api@hotmail.com'
-        const message = `
-            *EMAIL AUTOMATICO, POR FAVOR NÃO RESPONDA*
-            
-            Estamos notificando que um novo evento foi agendado, segue as informações:
-            -> Nome do evento: ${infoEvent.name}
-            -> Data do evento: ${infoEvent.dateEvent}
-            -> Descrição do evento: ${infoEvent.description}
-        `
-
-        
+       
+        console.log(process.env.EMAIL_USER)
         const remetente = nodemailer.createTransport({
-            host:'smtp.ethereal.email',
+            host:'smtp.ethereal.email', // smtp.live.com
             service: 'hotmail',
-            port: 587,
+            port: 587, //25 ou 465
             secure: false,
             auth: {
                 user: sendEmailFixo,
                 pass: 'api4teste'
             }
         })
-
+        console.log(AllEmails.length)
         for( var i = 0; i < AllEmails.length; i++){
             const emailASerEnviado = {
-                from: sendEmailFixo,
+                from: `Teste API <${sendEmailFixo}>`,
                 to:AllEmails[i],
                 subject: 'Enviando Email com Node.Js',
                 text: message
             }
-            remetente.sendMail(emailASerEnviado, function(error){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email enviado com sucesso.');
-                    }
-            });
+            setTimeout( () => {
+                remetente.sendMail(emailASerEnviado, function(error){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email enviado com sucesso.');
+                        }
+                });
+            }, 5000 )
+           
         }
         
     }

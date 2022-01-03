@@ -15,6 +15,9 @@ class Cadastro{
                 return{...body}
             })
     }
+    deletaUsers(id){
+        return repositorio.deletaUsers(id)
+    }
 }
 
 module.exports = new Cadastro

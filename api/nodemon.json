@@ -6,6 +6,8 @@
         "MYSQL_HOST": "localhost",
         "MYSQL_PORT":3306,
         "JWT_KEY": "JWT_KEY-SECRET-KEY-07022002",
-        "SECRET_KEY":"$2a$08$ckS7xXr1A5DUGxpmjZ.80.VtwOFV42n7kJyp/RIMTkO.zFARudASi"
+        "SECRET_KEY":"$2a$08$ckS7xXr1A5DUGxpmjZ.80.VtwOFV42n7kJyp/RIMTkO.zFARudASi",
+        "EMAIL_USER": "teste4api@hotmail.com",
+        "EMAIL_PASSWORD":"api4teste"
     }
 }

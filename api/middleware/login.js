@@ -12,7 +12,7 @@ module.exports = async function verifyJWT(req,res,next){
             await jwt.verify(token,tokenKEY,(err,decoded)=>{
                 if(err){
                     console.log('token invalido')
-                    return res.status(401).end()
+                    return res.status(401).json({message: 'token invalid'})
                 }
                 else{ 
                     console.log(decoded)
