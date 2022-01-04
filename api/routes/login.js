@@ -2,8 +2,7 @@ const SelectDB = require('../models/selectDB')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const Cadastro = require('../models/cadastroBD')
-
-
+const Email = require('../config/email')
 module.exports = app => {
 
     app.get('/login', (req,res)=>{
@@ -24,26 +23,31 @@ module.exports = app => {
         SelectDB.selecionaEmail(body)
             .then(resultados => {
                 if (resultados.length > 0){
-                    bcrypt.compare(body.password, resultados[0].password,(error,result)=> {
-                        if(error){
-                            return res.status(401).send({message: 'Falha na autenticação'})
-                        }
-                        if(result){
-                            const tokenKEY = (process.env.JWT_KEY)
-                            console.log(tokenKEY)
-                            const token = jwt.sign({
-                                    name: resultados[0].name,
-                                    email: resultados[0].email,
-                                    _idUser: resultados[0].id
-                                },tokenKEY,{
-                                    expiresIn: "1000000"
-                                })
-                            return res.status(200).send({message: 'Autenticado com sucesso!',auth:true,token:token, _idUser: resultados[0].id})
-                        }
-    
-                        return res.status(401).send({message: 'Falha na autenticação da password', message:'pass'})
-                    
-                    })
+                   
+                        console.log()
+                        console.log(response)
+                        bcrypt.compare(body.password, resultados[0].password,(error,result)=> {
+                            if(error){
+                                return res.status(401).send({message: 'Falha na autenticação'})
+                            }
+                            if(result){
+                                const tokenKEY = (process.env.JWT_KEY)
+                                console.log(tokenKEY)
+                                const token = jwt.sign({
+                                        name: resultados[0].name,
+                                        email: resultados[0].email,
+                                        _idUser: resultados[0].id
+                                    },tokenKEY,{
+                                        expiresIn: "1000000"
+                                    })
+                                return res.status(200).send({message: 'Autenticado com sucesso!',auth:true,token:token, _idUser: resultados[0].id})
+                            }
+        
+                            return res.status(401).send({message: 'Falha na autenticação da password', message:'pass'})
+                        
+                        })
+                      
+                   
                 }
                 else{
                     return res.status(401).send({message: 'Falha na autenticação do email', message: "invalid email"})

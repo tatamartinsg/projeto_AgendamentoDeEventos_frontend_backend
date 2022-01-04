@@ -1,6 +1,6 @@
 const Cadastro = require('../models/cadastroBD')
 const postSignUp = require('../controllers/signUP/postSignUp.js')
-
+const jwt = require('jsonwebtoken')
 module.exports = app => {
     app.get('/',(req,res)=>{
         res.send()
@@ -64,6 +64,37 @@ module.exports = app => {
              console.log(error)
              res.status(400).json({error: "couldn't delete the id inserted"})
          })
+     })
+
+     app.get('/confirmation/:token', async (req,res) => {
+         console.log('entrou')
+         http://localhost:3000/confirmation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJURVNURSBkZSBub3ZvIiwiZW1haWwiOiJ0aHJubW51dmV0bWFwa29yeXBAYnZocnMuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkT2xpLlhrN2NRNS5FemtHOW9WR29nT1Z6c283WXBVL1RyMDJFcTlvbHMxSkc2bE1ab0lkSmkifSwiZW1haWwiOiJ0aHJubW51dmV0bWFwa29yeXBAYnZocnMuY29tIiwiaWF0IjoxNjQxMjMwNjQ5LCJleHAiOjE2NDEyMzE2NDl9.Vy9ZrXO-75O79tHXOyGGfLiubXlmBqdXcqT90v9HQZY
+         
+        try{
+            const tokenKEY = 'JWT_KEY-SECRET-KEY-07022002'
+            console.log('req paramssssssssss',req.params.token)
+           
+            await jwt.verify(req.params.token,tokenKEY,(err,decoded)=>{
+                if(err){
+                    console.log('token invalido')
+                    return res.status(401).json({message: 'token invalid'})
+                }
+                else{ 
+                    console.log(decoded)
+                    console.log('usuario esta confirmado')
+                    Cadastro.updateCadastroConfirmed(decoded._idUser)
+                    return res.redirect('http://localhost:8080')
+
+                }
+            })
+
+
+            
+        }
+        catch (e) {
+            console.log(e)
+        }
+       
      })
 
 }

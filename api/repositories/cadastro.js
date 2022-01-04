@@ -18,6 +18,10 @@ class Cadastro{
         const sql = `DELETE FROM signUP_users WHERE id = '${id}';`
         return query(sql)
     }
+    updateCadastroConfirmed(id){
+        const sql = `UPDATE signUP_users SET confirmed = 'true' WHERE id = '${id}'`
+        return query(sql)
+    }
 }
 
 module.exports = new Cadastro

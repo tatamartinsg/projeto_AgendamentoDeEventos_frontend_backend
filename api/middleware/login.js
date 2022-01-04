@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken')
 
+
+
+
+
 module.exports = async function verifyJWT(req,res,next){
         console.log("entrou verify")
         console.log(req.headers)

@@ -18,6 +18,9 @@ class Cadastro{
     deletaUsers(id){
         return repositorio.deletaUsers(id)
     }
+    updateCadastroConfirmed(id){
+        return repositorio.updateCadastroConfirmed(id)
+    }
 }
 
 module.exports = new Cadastro

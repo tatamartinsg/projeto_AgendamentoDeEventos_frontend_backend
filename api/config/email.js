@@ -22,7 +22,7 @@ class Email{
                 from: `Teste API <${sendEmailFixo}>`,
                 to:AllEmails[i],
                 subject: 'Enviando Email com Node.Js',
-                text: message
+                html: message
             }
             setTimeout( () => {
                 remetente.sendMail(emailASerEnviado, function(error){
