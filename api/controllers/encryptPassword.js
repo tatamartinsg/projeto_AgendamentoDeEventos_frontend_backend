@@ -8,7 +8,8 @@ function EncryptPassword(body){
     const body_with_hash = {
         name: body.name,
         email: body.email,
-        password: senhaParaSalvar
+        password: senhaParaSalvar,
+        confirmed: 'false'
     }
     return Cadastro.insertCadastro(body_with_hash)
 }

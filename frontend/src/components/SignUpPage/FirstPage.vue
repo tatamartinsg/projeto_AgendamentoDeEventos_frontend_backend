@@ -1,94 +1,96 @@
 <template>
-
-   <section class="container">
-       <!-- WELCOME BACK -->
-       <div :class="{displayNONE:isActive, firstdiv: 'firstdiv'}">
-            <div class="first-filho">
-                <h1>Welcome Back</h1>
-                <p>To keep conected with us</p>
-                <p>please login in your account</p>
-                <button v-on:click="changeClass()" id="sign-in-welcome" :class="{ displayNONE: isActive, btn: 'btn btn-light' }">Sign In</button>
-            </div>
-        </div>
-
-        <!-- CREATEE ACCOUNT -->
-        <div :class="{displayNONE:isActive, seconddiv:'seconddiv'}">
-            <div class="second-filho">
-                <h1 class="create-account">Create Account</h1>
-                <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                <p>or use your email for registration:</p>
-                
-                <form class="form formSIGNUP">
-                    <div class="form-group row">
-                        <label class="label-input"  for=""> <i class="far fa-user icon-modify"></i></label>
-                        <div class="col-sm-10">
-                            <input v-model="name" id="inputnameUP" name="name" class="form-control" type="text" placeholder="name">
-                        </div>
+    <div>
+        <div :class="{loading:loading}"></div>
+        <modal-bts :token="token" :email="email" :sendEmail="true" :title="'Confirm your email account'" :class="{confirmation: !confirmation}" v-on:understood="understood" :message="message" :confirma="confirma" />
+        <section :class="{confirmation: confirmation}" class="container">
+            <!-- WELCOME BACK -->
+            <div :class="{displayNONE:isActive, firstdiv: 'firstdiv'}">
+                    <div class="first-filho">
+                        <h1>Welcome Back</h1>
+                        <p>To keep conected with us</p>
+                        <p>please login in your account</p>
+                        <button v-on:click="changeClass()" id="sign-in-welcome" :class="{ displayNONE: isActive, btn: 'btn btn-light' }">Sign In</button>
                     </div>
-                    
-                    <div class="form-group row">
-                        <label for="exampleInputEmailUP"><i class="far fa-envelope icon-modify"></i> </label>
-                        <div class="col-sm-10">
-                            <input v-model="email" type="email" class="form-control " id="exampleInputEmailUP" aria-describedby="emailHelp" placeholder="email@hotmail.com" name="email">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email.</small>
-                        </div>
-                    </div>
-                   
-                     <div class="form-group row">
-                        <label for="exampleInputPasswordUP"><i class="far fas fa-lock icon-modify"></i></label>
-                        <div class="col-sm-10">
-                            <input v-model="password" name="password" placeholder="password" type="password" class="form-control" id="exampleInputPasswordUP">
-                            <small id="passHelp" class="form-text text-muted">Your password must have at least ...</small>
-                        </div>
-                     </div>
-                    
-                    
-                    <button v-on:click.prevent="insertCadastro()" id="signUP" class="btn btn-success">Sign Up</button>
-                    
-                </form>
-            </div>
-        </div>
-        
+                </div>
 
-         <!-- HELLO FRIEND -->
-        <div :class="{firstdiv2:'firstdiv2', displayNONE: isNotActive}">
-            <div class="first-filho">
-                <h1>Hello Friend!</h1>
-                <p>Do your log in to join with us!</p>
-                <p>please, if you do not have an account, click the button bellow:</p>
-                <button v-on:click="changeClass()" id="sign-UP-welcome" class="btn btn-light">Sign Up</button>
-            </div>
-        </div>
-
-         <!-- SIGN IN -->
-        <div :class="{thirddiv:'thirddiv', displayNONE: isNotActive}">
-            <div class="second-filho">
-                <h1 class="create-account">Login Account</h1>
-                <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                <p>or use your email for login:</p>
-                
-                
-                    <form class="form formLOGIN">
-                        <div class="form-group row">
-                            <label for="exampleInputEmailIN"> <i class="far fa-envelope icon-modify"></i></label>
-                            <div class="col-sm-10">
-                                <input v-model="email"  type="email" class="form-control " id="exampleInputEmailIN" aria-describedby="emailHelp" placeholder="email" name="email">
-                                <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                <!-- CREATEE ACCOUNT -->
+                <div :class="{displayNONE:isActive, seconddiv:'seconddiv'}">
+                    <div class="second-filho">
+                        <h1 class="create-account">Create Account</h1>
+                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                        <p>or use your email for registration:</p>
+                        
+                        <form class="form formSIGNUP">
+                            <div class="form-group row">
+                                <label class="label-input"  for=""> <i class="far fa-user icon-modify"></i></label>
+                                <div class="col-sm-10">
+                                    <input v-model="name" id="inputnameUP" name="name" class="form-control" type="text" placeholder="name">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="exampleInputPasswordIN"><i class="far fas fa-lock icon-modify"></i></label>
-                            <div class="col-sm-10">
-                                <input v-model="password" placeholder="password" type="password" class="form-control" id="exampleInputPasswordIN" name="password">
-                            </div>                            
-                        </div>               
-                        <button v-on:click.prevent="loginAxios()" id="signIN" class="btn btn-success">Sign In</button>              
-                </form>
-            </div>
-        </div>
-        
-   </section>
+                            
+                            <div class="form-group row">
+                                <label for="exampleInputEmailUP"><i class="far fa-envelope icon-modify"></i> </label>
+                                <div class="col-sm-10">
+                                    <input v-model="email" type="email" class="form-control " id="exampleInputEmailUP" aria-describedby="emailHelp" placeholder="email@hotmail.com" name="email">
+                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email.</small>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group row">
+                                <label for="exampleInputPasswordUP"><i class="far fas fa-lock icon-modify"></i></label>
+                                <div class="col-sm-10">
+                                    <input v-model="password" name="password" placeholder="password" type="password" class="form-control" id="exampleInputPasswordUP">
+                                    <small id="passHelp" class="form-text text-muted">Your password must have at least ...</small>
+                                </div>
+                            </div>
+                            
+                            
+                            <button v-on:click.prevent="insertCadastro()" id="signUP" class="btn btn-success">Sign Up</button>
+                            
+                        </form>
+                    </div>
+                </div>
+                
 
+                <!-- HELLO FRIEND -->
+                <div :class="{firstdiv2:'firstdiv2', displayNONE: isNotActive}">
+                    <div class="first-filho">
+                        <h1>Hello Friend!</h1>
+                        <p>Do your log in to join with us!</p>
+                        <p>please, if you do not have an account, click the button bellow:</p>
+                        <button v-on:click="changeClass()" id="sign-UP-welcome" class="btn btn-light">Sign Up</button>
+                    </div>
+                </div>
+
+                <!-- SIGN IN -->
+                <div :class="{thirddiv:'thirddiv', displayNONE: isNotActive}">
+                    <div class="second-filho">
+                        <h1 class="create-account">Login Account</h1>
+                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                        <p>or use your email for login:</p>
+                        
+                        
+                            <form class="form formLOGIN">
+                                <div class="form-group row">
+                                    <label for="exampleInputEmailIN"> <i class="far fa-envelope icon-modify"></i></label>
+                                    <div class="col-sm-10">
+                                        <input v-model="email"  type="email" class="form-control " id="exampleInputEmailIN" aria-describedby="emailHelp" placeholder="email" name="email">
+                                        <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputPasswordIN"><i class="far fas fa-lock icon-modify"></i></label>
+                                    <div class="col-sm-10">
+                                        <input v-model="password" placeholder="password" type="password" class="form-control" id="exampleInputPasswordIN" name="password">
+                                    </div>                            
+                                </div>               
+                                <button v-on:click.prevent="loginAxios()" id="signIN" class="btn btn-success">Sign In</button>              
+                        </form>
+                    </div>
+                </div>
+                
+        </section>
+    </div>
 </template>
 
 <script>
@@ -96,12 +98,14 @@
 import { ValidEmail } from '../../js/ValidEmail.js'
 import { ValidPassword } from '../../js/ValidPassword.js'
 import { ValidName } from '../../js/ValidName.js'
+import Modal from '../Modal/Modal.vue'
 // import func from 'vue-editor-bridge'
-
-
 
 export default {
     name:'FirsPage',
+    components:{
+        'modal-bts': Modal
+    },
     data(){
         return{
             title: 'Home Page',
@@ -110,13 +114,20 @@ export default {
             email: '',
             name:'',
             password:'',
-            searchParamss: []
+            searchParamss: [],
+            confirmation: false,
+            loading: false,
+            message:'Please check your email account, you need to confirm if it exists!',
+            confirma:'Understood',
+            token:""
         }
     },
     methods:{
         changeClass: function(){
             this.isActive =  !this.isActive
             this.isNotActive = !this.isNotActive
+            
+            
         },
         alertToastr: function(type,message,title){
              this.$toastr(type,message,title)
@@ -142,7 +153,7 @@ export default {
             for (const pair of formData){
                 searchParams.append(pair[0],pair[1])
             }
-            
+            console.log(searchParams)
             return searchParams
         },
         insertCadastro:  function(){
@@ -171,13 +182,10 @@ export default {
                 if( this.postAxios(classForm)){
                     this.$http.post(`${path}`, this.postAxios(classForm))
                     .then(res =>{
-                        console.log(res)
-                        message = 'Cadastrado com sucesso!'
-                        this.alertToastr('success',message,'Sucesso!')
-                        this.changeClass()
-                        this.email = ''
-                        this.name = ''
-                        this.password = ''
+                        console.log(res.data.token)
+                        this.changeToken(res.data.token)
+                        let confirm = true
+                        this.loadingConfirmation(confirm)       
                     })
                     .catch(error => {
                         console.error("There was an error!", error);
@@ -205,7 +213,7 @@ export default {
                         this.alertToastr('success', 'Login has been done', 'Success')
                         setTimeout(()=> {
                             this.$router.push({name: 'clientes'})
-                        },2000)
+                        },1500)
                     })
                     .catch( (error) => {
                         console.log(error) 
@@ -215,8 +223,11 @@ export default {
                         else if(error.response.data.message == 'invalid email'){
                             this.alertToastr('warning','Email Invalid','Error')
                         }
-                        else{
+                        else if(error.response.data.auth == true){
                             this.alertToastr('success','Autenticado com sucesso.', 'Sucesso!')
+                        }
+                        else if(error.response.data.message == 'email is not confirmed'){
+                            this.alertToastr('warning','Email is not confirmed','Error')
                         }
                     })
 
@@ -241,6 +252,20 @@ export default {
             }
 
             
+        },
+        loadingConfirmation(confirm){
+            this.loading = true
+            setTimeout(() => {
+                this.loading = false
+                this.confirmation = confirm
+            },2000) 
+        },
+        understood(){
+            let confirm = false
+            this.loadingConfirmation(confirm)
+        },
+        changeToken(token){
+            this.token = token
         }
       
 
@@ -249,5 +274,21 @@ export default {
 </script>
 
 <style scoped>
-
+.confirmation{
+    display: none;
+}
+.loading{
+    animation: is-rotating 1s infinite;
+    border: 6px solid #c2b7b7;
+    border-radius: 50%;
+    border-top-color: #1f856f;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+}
+@keyframes is-rotating {
+    to {
+        transform: rotate(1turn);
+    }
+}
 </style>

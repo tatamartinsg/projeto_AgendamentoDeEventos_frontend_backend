@@ -1,19 +1,22 @@
 const nodemailer = require('nodemailer')
 
 class Email{
-    sendEmail(message, AllEmails){
-        console.log(AllEmails)
+    async sendEmail(message, AllEmails) {
+    
+        console.log(AllEmails[0])
         const sendEmailFixo = 'teste4api@hotmail.com'
-       
-        console.log(process.env.EMAIL_USER)
-        const remetente = nodemailer.createTransport({
+    
+        const remetente = await nodemailer.createTransport({
             host:'smtp.ethereal.email', // smtp.live.com
             service: 'hotmail',
-            port: 587, //25 ou 465
+            port: 465, //25 ou 465
             secure: false,
             auth: {
                 user: sendEmailFixo,
                 pass: 'api4teste'
+            },
+            tls: {
+                rejectUnauthorized: false
             }
         })
         console.log(AllEmails.length)

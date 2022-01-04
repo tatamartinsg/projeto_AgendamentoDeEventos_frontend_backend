@@ -76,14 +76,15 @@ module.exports = app => {
            
             await jwt.verify(req.params.token,tokenKEY,(err,decoded)=>{
                 if(err){
-                    console.log('token invalido')
-                    return res.status(401).json({message: 'token invalid'})
+                    console.log('token invalid')
+                    return res.status(401).json({message: "token invalid"})
                 }
                 else{ 
                     console.log(decoded)
                     console.log('usuario esta confirmado')
                     Cadastro.updateCadastroConfirmed(decoded._idUser)
-                    return res.redirect('http://localhost:8080')
+                    res.status(200).json({message:"email confirmed"})
+                    
 
                 }
             })

@@ -1,6 +1,7 @@
 const Select = require('../../models/selectDB')
 const SelectDB = require('../../models/selectDB')
-const CadastroController = require('../encryptPassword')
+const { EncryptPassword } = require('../encryptPassword')
+const Email = require('../../config/email.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 // const Email = require('../../config/email')
@@ -31,53 +32,54 @@ module.exports = function postSignUp(req,res) {
                         res.status(400).json({message: 'Email existente!'})
                     }
                     else{
-                        CadastroController.EncryptPassword(body)
-                            .then(resultadosPassword => {
-                                SelectDB.selecionaEmail(body)
-                                .then(resultados => {
-                                    if (resultados.length > 0){
-                                        bcrypt.compare(body.password, resultados[0].password,(error,result)=> {
-                                            if(error){
-                                                return res.status(401).send({message: 'Falha na autenticação'})
-                                            }
-                                            if(result){
-                                                console.log(resultados)
-                                                const tokenKEY = (process.env.JWT_KEY)
-                                                console.log('AAAAAAAAAAAAAAAAAAAAAAA')
-                                                console.log(resultadosPassword)
-                                                const token = jwt.sign({
-                                                    name: resultados[0].name,
-                                                    email: resultados[0].email,
-                                                    _idUser: resultados[0].id
-                                                },tokenKEY,{
-                                                    expiresIn: "1000000"
-                                                })
-
-                                                const url = `http://localhost:3000/confirmation/${token}`
-                                                console.log(url)
-                                                // const message = `Please click this email to confirm your email: <a href="${url}">${url}</a>`
-                                                // const emailSent = [resultadosPassword.email]
-                                                // Email.sendEmail(message,emailSent)
-                                                http://localhost:3000/confirmation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiam9hbyBlIG1hcmlhIiwiZW1haWwiOiJBc0Bob3RtYWlsLmNvbSIsIl9pZFVzZXIiOjMwLCJpYXQiOjE2NDEyMzMwODcsImV4cCI6MTY0MTIzNDA4N30.1MqoTAsDv5dH0j4wx8K-gWyt3syz2Dosi7UfaRqwRyM%20token%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiam9hbyBlIG1hcmlhIiwiZW1haWwiOiJBc0Bob3RtYWlsLmNvbSIsIl9pZFVzZXIiOjMwLCJpYXQiOjE2NDEyMzMwODcsImV4cCI6MTY0MTIzNDA4N30.1MqoTAsDv5dH0j4wx8K-gWyt3syz2Dosi7UfaRqwRyM
-                                                console.log('aaaaaaaaaaaaaaaaa')
-                                                console.log('token', token)
-                                                res.status(200).json({message: 'Cadastrado com sucesso!'})
-                                            }
-                                        })
+                        EncryptPassword(body)
+                    
+                        SelectDB.selecionaEmail(body)
+                            .then(resultados => {
+                            console.log('results',resultados)
+                            if (resultados.length > 0){
+                                bcrypt.compare(body.password, resultados[0].password,(error,result)=> {
+                                    if(error){
+                                        return res.status(401).send({message: 'Falha na autenticação'})
                                     }
-                                })
+                                    if(result){
+                                        console.log(resultados)
+                                        const tokenKEY = (process.env.JWT_KEY)
+                                        console.log('AAAAAAAAAAAAAAAAAAAAAAA')
+                                        const token = jwt.sign({
+                                            name: resultados[0].name,
+                                            email: resultados[0].email,
+                                            _idUser: resultados[0].id
+                                        },tokenKEY,{
+                                            expiresIn: "2000000"
+                                        })
+
+                                        const url = `http://localhost:8080/confirmation/${token}`
+                                        console.log(url)
+                                        const message = `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+                                        const emailSent = [resultados[0].email]
+                                        console.log(emailSent)
+                                        
+                                        try {
+                                            // Email.sendEmail(message, emailSent)
+                                            console.log('deu certo')
+                                        }
+                                        catch (err) {
+                                            console.log('deu erro', err)
+                                        } 
+                                           
+                                        console.log('aaaaaaaaaaaaaaaaa')
+                                        console.log('token', token)
+                                        res.status(200).json({message: "sucessfull", token:token})
+                                     
+                                    }
+                                    })
+                                }
+                            }).catch(err => console.log(err))
                                 
-                            })  
-                            .catch(erros =>{
-                                console.log(erros)
-                                res.status(400).json(erros)
-                            })
                     }
                 })
-                .catch(erros =>{
-                    console.log(erros)
-                    res.status(400).json(erros)
-                })
+             
         }
         else{
             console.log("Caracteres na senha são insuficientes (menor que 5)")
