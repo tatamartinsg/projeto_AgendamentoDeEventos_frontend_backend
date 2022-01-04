@@ -208,7 +208,7 @@ export default {
                         },2000)
                     })
                     .catch( (error) => {
-                        console.log(error)
+                        console.log(error) 
                         if(error.response.data.message == 'pass'){
                             this.alertToastr('warning','Password Invalid','Error')
                         }
