@@ -6,8 +6,7 @@ module.exports = app => {
         res.send()
     })
     app.get('/all-cadastros', (req,res) => {
-        // const email = 'tassiamaggv929@hotmail.com'
-        // Email.sendEmail(email)
+
         const infoEmail = [
             {
                 nameEvent
@@ -66,10 +65,7 @@ module.exports = app => {
          })
      })
 
-     app.get('/confirmation/:token', async (req,res) => {
-         console.log('entrou')
-         http://localhost:3000/confirmation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7Im5hbWUiOiJURVNURSBkZSBub3ZvIiwiZW1haWwiOiJ0aHJubW51dmV0bWFwa29yeXBAYnZocnMuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkT2xpLlhrN2NRNS5FemtHOW9WR29nT1Z6c283WXBVL1RyMDJFcTlvbHMxSkc2bE1ab0lkSmkifSwiZW1haWwiOiJ0aHJubW51dmV0bWFwa29yeXBAYnZocnMuY29tIiwiaWF0IjoxNjQxMjMwNjQ5LCJleHAiOjE2NDEyMzE2NDl9.Vy9ZrXO-75O79tHXOyGGfLiubXlmBqdXcqT90v9HQZY
-         
+     app.get('/confirmation/:token', async (req,res) => {    
         try{
             const tokenKEY = 'JWT_KEY-SECRET-KEY-07022002'
             console.log('req paramssssssssss',req.params.token)

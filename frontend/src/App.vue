@@ -4,7 +4,7 @@
     <div id="app">
       
       <transition name="page">
-         <router-view></router-view>
+         <router-view :rotas="routes"></router-view>
       </transition>
     </div>
   </div>

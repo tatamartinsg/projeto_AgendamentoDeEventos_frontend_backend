@@ -25,7 +25,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((routerTo, routerFrom, next) => {
-  if(!routerTo.meta.publica && !provedor.state.token){
+  if (!routerTo.meta.publica && !provedor.state.token) {
+    alert('Please, log in first!')
     return next({path: '/'})
   }
   next()

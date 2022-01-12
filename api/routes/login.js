@@ -10,15 +10,10 @@ module.exports = app => {
     })
 
     app.post('/login', (req,res) => {
-        console.log("entrou login")
-        // const a = req.headers
-        // console.log(a)
-        // console.log(req)
         const body = {
             email: req.body.email,
             password: req.body.password
         }
-        // console.log(req)
         console.log(body)
         SelectDB.selecionaEmail(body)
             .then(resultados => {

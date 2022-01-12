@@ -1,5 +1,6 @@
 <template>
     <div align="center">
+        {{rotas[0].path}}
         <modal-bts-confirm :sendEmail="false" :title="title" :message="message" :confirma="confirma" v-on:understood="clickhere"> </modal-bts-confirm>
     </div>
     
@@ -10,6 +11,11 @@ import Modal from '../Modal/Modal.vue'
 export default{
     components:{
         'modal-bts-confirm': Modal
+    },
+    props:{
+        rotas:{
+            type:Array
+        }
     },
     data(){
         return{
@@ -31,7 +37,7 @@ export default{
                 if(response.data.message == 'email confirmed'){
                     this.$toastr('success','Your email has been confirmed','Successfull')
                     setTimeout( () => {
-                        window.location.href = "http://localhost:8080/"
+                        this.$router.push('../')
                     },2000)
                 }
             })
@@ -41,7 +47,8 @@ export default{
                     this.$toastr('error','Token Invalid','Error')
                 }
             })
-        }
+        },
+   
     }
 }
 </script>

@@ -65,8 +65,10 @@
 //     import axios from 'axios'
 import provedor from '../../../store/index.js'
 import { EventGetDate } from '../../../js/EventGetDate.js'
+import { logOutMixin } from '@/mixins.js'
     export default{
         name: 'Clientes',
+        mixins: [logOutMixin],
         data(){
             return{
                 isActiveAddEvent: true,
@@ -87,7 +89,13 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                         alert("Token invalido")
                     }
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    console.log(error.response.data)
+                    if(error.response.data.message == 'token invalid'){
+                        alert('your token is not usefull anymore, please do a log in again')
+                        this.$store.commit('LOGOUT_USER')
+                    }
+                })
             console.log(provedor.state._idUser)
             console.log(EventGetDate)
         },  
@@ -97,13 +105,16 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                 this.transitionEvent =! this.transitionEvent
             },
             formParams(){
+                if(this.check == ''){
+                    this.check = false
+                }
                 const objeto = {
-                    name: this.name,
+                    nameEvent: this.name,
                     dateEvent: this.date,
                     dateCreated: EventGetDate(),
                     description: this.description,
-                    check: this.check,
-                    idUserLogged: provedor.state._idUser,
+                    checkbox: this.check,
+                    emailID: provedor.state._idUser,
                 }
                 return objeto
             },
@@ -131,6 +142,7 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
             // },
             submitEvent(){
                 this.confirm =! this.confirm
+                
                 this.$http.post('/addEvent', this.formParams())
                     .then((response) =>{
                         this.$toastr('success','Event was added with successful','Event Added')
@@ -138,9 +150,9 @@ import { EventGetDate } from '../../../js/EventGetDate.js'
                         document.querySelector('.formEvent').reset();
                        
 
-                        if(response.data.check == true){
-                            this.sendEmailAoBackEnd(response.data)
-                        }
+                        // if(response.data.check == true){
+                        //     this.sendEmailAoBackEnd(response.data)
+                        // }
                     })
                     .catch((error) => {
                         console.log(error.response)

@@ -1,12 +1,15 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import http from '@/http'
+import createPersistedState from 'vuex-persistedstate'
+import * as Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 
 const estado = {
     token: null,
-    _idUser: null
+    _idUser: null,
+    counter: 0
 }
 
 const mutations = {
@@ -48,5 +51,15 @@ export default new Vuex.Store({
     state: estado,
     mutations,
     actions,
-    getters
+    getters,
+    plugins: [
+        createPersistedState({
+            storage: {
+                getItem: (key) => Cookies.get(key),
+                setItem: (key, value) =>
+                    Cookies.set(key, value, { expires: 3, secure: true }),
+                    removeItem: (key) => Cookies.remove(key),
+                },
+        })
+    ]
 })

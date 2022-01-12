@@ -1,7 +1,8 @@
 <template>
     <div>
         <div :class="{loading:loading}"></div>
-        <modal-bts :token="token" :email="email" :sendEmail="true" :title="'Confirm your email account'" :class="{confirmation: !confirmation}" v-on:understood="understood" :message="message" :confirma="confirma" />
+        <modal-bts :token="token" :email="email" :sendEmail="sendEmail" :title="'Confirm your email account'" :class="{confirmation: !confirmation}" v-on:understood="understood" :message="message" :confirma="confirma" />
+
         <section :class="{confirmation: confirmation}" class="container">
             <!-- WELCOME BACK -->
             <div :class="{displayNONE:isActive, firstdiv: 'firstdiv'}">
@@ -83,9 +84,11 @@
                                     <div class="col-sm-10">
                                         <input v-model="password" placeholder="password" type="password" class="form-control" id="exampleInputPasswordIN" name="password">
                                     </div>                            
-                                </div>               
+                                </div>
+                                <a href="/changepass">Did you forget your password? Click here!</a>               
                                 <button v-on:click.prevent="loginAxios()" id="signIN" class="btn btn-success">Sign In</button>              
                         </form>
+                        
                     </div>
                 </div>
                 
@@ -99,6 +102,8 @@ import { ValidEmail } from '../../js/ValidEmail.js'
 import { ValidPassword } from '../../js/ValidPassword.js'
 import { ValidName } from '../../js/ValidName.js'
 import Modal from '../Modal/Modal.vue'
+// import provedor from '../../store/index'
+import { mapState } from 'vuex'
 // import func from 'vue-editor-bridge'
 
 export default {
@@ -119,15 +124,21 @@ export default {
             loading: false,
             message:'Please check your email account, you need to confirm if it exists!',
             confirma:'Understood',
-            token:""
+            token:"",
+            sendEmail: true,
+            
         }
     },
+    computed:{
+        ...mapState({
+            counter: state => state.counter
+        })
+    }
+    ,
     methods:{
         changeClass: function(){
             this.isActive =  !this.isActive
             this.isNotActive = !this.isNotActive
-            
-            
         },
         alertToastr: function(type,message,title){
              this.$toastr(type,message,title)
@@ -183,9 +194,10 @@ export default {
                     this.$http.post(`${path}`, this.postAxios(classForm))
                     .then(res =>{
                         console.log(res.data.token)
-                        this.changeToken(res.data.token)
+                        console.log(res)
                         let confirm = true
-                        this.loadingConfirmation(confirm)       
+                        this.changeToken(res.data.token)
+                        this.loadingConfirmation(confirm)
                     })
                     .catch(error => {
                         console.error("There was an error!", error);
@@ -258,22 +270,25 @@ export default {
             setTimeout(() => {
                 this.loading = false
                 this.confirmation = confirm
+                this.sendEmail = true
             },2000) 
         },
         understood(){
             let confirm = false
+            this.sendEmail = false
             this.loadingConfirmation(confirm)
+            this.changeClass()
         },
         changeToken(token){
             this.token = token
         }
-      
+    },
 
-    }
 }
 </script>
 
 <style scoped>
+
 .confirmation{
     display: none;
 }

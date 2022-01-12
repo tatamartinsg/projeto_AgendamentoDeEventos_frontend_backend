@@ -2,7 +2,7 @@
     <div>
         <div class="myevents">
             <div class="div-myEvents">
-                <h2 class="event-title">My Events</h2>
+                <h2 class="event-title">Events you're confirmed</h2>
                 <div class="div-showEvents">
                     <button @click="showEvents()" class="showEvents btn btn-success">Show Events</button>
                 </div>
@@ -10,29 +10,24 @@
             <div>
                 <div :class="{isActiveshowEvents: isActiveshowEvents}">
                     <ul v>
-                        <li v-for="(events,index) in allEvents" :key="events">
-                            <div class="card " >
+                        <li v-for="(events,index) in allEventsConfirmed" :key="events">
+                            <div class="card " id="cardConfirmed" >
                                 <div class="card-body" >
                                     <h5 class="card-title">{{events.nameEvent}}</h5>
                                     <div :class="'card'+index">
                                         <p class="card-text">Description: {{events.description}}</p>
                                         <!-- <p>Data do Evento: {{events.dateEvent.split('-')[2]+'/'+events.dateEvent.split('-')[1]+'/'+events.dateEvent.split('-')[0]}} </p> -->
                                         <p>Data do Evento: {{dataArrumada(events.dateEvent)[2] + '/' + dataArrumada(events.dateEvent)[1] + '/'+ dataArrumada(events.dateEvent)[0]}}</p>
-                                        <p v-if="events.checkbox == 'false' || events.checkbox == '' ||events.checkbox == '0' ">NÃO notificamos este evento para outros usuários</p>
-                                        <p v-else>Notificamos este evento para outros usuários</p>
+                                        <!-- <p v-if="events.checkbox == 'false' || events.checkbox == ''">NÃO notificamos este evento para outros usuários</p> -->
+                                        <!-- <p v-else>Notificamos este evento para outros usuários</p> -->
                                     </div>
                                    
                                     
-                                    <button @click.prevent="removeEvent(index,events.id_schedule)" class="btn btn-danger btnremove">
-                                        
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="22" fill="currentColor" class="bi bi-trash" viewBox="0 0 15 15">
-                                           
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                        </svg>
+                                    <button @click.prevent="cancelParticipation(index,events.eventID)" class="btn btn-danger btnremove">
+                                        Cancel Participation
                                     </button>
                                     <button @dblclick.prevent=" clicoudnv(index)" @click.prevent="clicou(index)" href="#" :class="'button'+index" class="btn btn-dark">{{title_button}}</button>
-                                    <button @click.prevent="show(index)" class="btn btn-primary">Show Participants</button>
+                                    <!-- <button @click.prevent="show(index)" class="btn btn-primary">Show Participants</button> -->
                                 </div>
                                  
                             </div>
@@ -53,12 +48,13 @@
         data(){
             return{
                 isActiveshowEvents: true,
-                allEvents: [],
+                allEventsConfirmed: [],
                 dates: [],
                 clickOnce: false,
                 hide: false,
                 buttonWasClicked: false,
-                title_button: "Hide Event"
+                title_button: "Hide Event",
+
             }
         },
         methods:{
@@ -68,37 +64,51 @@
                 console.log(this.allEvents[index])
             },
             showEvents(){
-
-                if(this.clickOnce === false){
-                    this.isActiveshowEvents =! this.isActiveshowEvents
-                    this.$http.get(`/allEvents/${provedor.state._idUser}`)
-                        .then(response => {
-                            this.allEvents = response.data
-                            if(response.data.length == 0 ){
-                                return this.$toastr('warning', 'There is no events to be shown', 'Events are empty')
-                            }
-                        
-                        })
-                        .catch( error => {
-                            console.log(error)
-                        })
-                }
+                this.isActiveshowEvents =! this.isActiveshowEvents
+                this.$http.get(`/all-cadastros/${provedor.state._idUser}`)
+                    .then(response => {
+                        let email_user = response.data[0].email
+                        this.$http.get(`/emailconfirmed/${email_user}`)
+                            .then(response => {
+                                console.log(response.data.response.length)
+                                console.log(response.length)
+                                this.allEventsConfirmed = response.data.response
+                                console.log(this.allEventsConfirmed)
+                                if(response.data.response.length == 0){
+                                    return this.$toastr('warning', 'There is no events that you confirmed yet', 'Events confirmed are empty' )
+                                }
+                                
+                            })
+                            .catch(error => {
+                                console.log(error.response.data.message)
+                                if(error.response.data.message == 'empty'){
+                                    this.$toastr('warning', 'There is no events that you confirmed yet', 'Events confirmed are empty' )
+                                }
+                            })
+        
+                    })
+                    .catch( error => {
+                        console.log(error.response.data.message)
+                    })
                 // this.clickOnce = true
                    
                
             },
-            removeEvent(index, id_schedule){
-                if(confirm("Do you want to delete this event?") == true){
-                    this.allEvents.splice(index, 1)
-                    this.$http.delete(`/eventDelete/${id_schedule}`)
-                        .then(response => {
-                            console.log(response)
+            cancelParticipation(index, id_schedule){
+                if(confirm("Do you want to desconfirm your participation on this event?") == true){
+                    
+                    console.log('ok', index,id_schedule)
+                    let email_user_participation = this.allEventsConfirmed[0].emailConfirmed
+                    let id_event = this.allEventsConfirmed[0].eventID
+                    this.$http.delete(`/delete-participation-event/${email_user_participation}/${id_event}`)
+                        .then(respostaDelete => {
+                            console.log(respostaDelete)
+                            this.allEventsConfirmed.splice(index, 1)
                         })
-                        .catch( error => {
-                            console.log(error)
+                        .catch(errDelete => {
+                            console.log(errDelete.response)
                         })
-                    console.log(id_schedule) // id pra buscar e deletar no banco de dados
-                    //manda um post delete
+                    console.log(email_user_participation, id_event)
                 }
                 
             },
@@ -137,7 +147,6 @@
     box-shadow: 3px 4px 10px rgb(179, 179, 179);
     border-radius: 10px;
     background-color: #ffffff;
-    width: 95%;
     height: 100%;
 }
 .div-myEvents{
@@ -157,7 +166,7 @@
 }
 .div-showEvents button{
     /* width: 200px; */
-    margin-left: 210%;
+    margin-left: 120%;
     margin-top: 0;
 }
 
@@ -173,9 +182,7 @@
 .card-body button{
    margin: 5px;
 }
-div.card{
-    width: 100%;
-}
+
 li{
     list-style: none;
 }

@@ -61,16 +61,17 @@ module.exports = function postSignUp(req,res) {
                                         console.log(emailSent)
                                         
                                         try {
-                                            // Email.sendEmail(message, emailSent)
-                                            console.log('deu certo')
+                                            // if (Email.sendEmail(message, emailSent)) {
+                                            //      res.status(200).json({message: "sucessfull", token:token})
+                                            // }
+                                            res.status(200).json({message: "sucessfull", token:token})
                                         }
                                         catch (err) {
                                             console.log('deu erro', err)
+                                            res.status(400).json({message: "error sending the email", token:token})
                                         } 
                                            
-                                        console.log('aaaaaaaaaaaaaaaaa')
-                                        console.log('token', token)
-                                        res.status(200).json({message: "sucessfull", token:token})
+                                       
                                      
                                     }
                                     })
