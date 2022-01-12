@@ -1,4 +1,4 @@
-const Cadastro = require('../models/cadastroBD')
+const Cadastro = require('../../models/cadastroBD')
 const bcrypt = require('bcrypt')
 
 function EncryptPassword(body){

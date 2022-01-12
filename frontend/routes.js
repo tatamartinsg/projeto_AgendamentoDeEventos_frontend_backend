@@ -40,7 +40,7 @@ export const routes = [
       props: true
   },
     {
-      path: '/showParticipants/:id',
+      path: '/show-participants/:secretKey',
       name: 'showParticipants',
       component: () => import('./src/components/EventPage/ShowEvents/ShowEvents.vue'),
       props: true

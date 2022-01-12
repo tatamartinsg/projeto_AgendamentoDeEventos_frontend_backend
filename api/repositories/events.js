@@ -9,6 +9,10 @@ class Events{
         const sql = `INSERT INTO schedule_event SET ? `
         return query(sql,body)
     }
+    addIdEncrypt(last_id,idEncrypt) {
+        const sql = `UPDATE schedule_event SET idEncrypt = '${idEncrypt}' WHERE id_schedule = '${last_id}';`
+        return query(sql)
+    }
     getEvents(getId){
         const sql = `SELECT * FROM schedule_event WHERE emailID = '${getId}';`
         return query(sql,getId)
@@ -29,8 +33,12 @@ class Events{
         const sql = `SELECT * FROM schedule_event WHERE id_schedule = '${getId}';`
         return query(sql,getId)
     }
+    getEventsByIdEncrypt(getId){
+        const sql = `SELECT * FROM schedule_event WHERE idEncrypt = '${getId}';`
+        return query(sql,getId) 
+    }
     addPersonWhoIsConfirmed(body) {
-        const sql = `INSERT INTO schedule_event_confirmed(nameEvent, namePerson, dateEvent, description ,emailConfirmed, eventID) VALUES ('${body.nameEvent}','${body.namePerson}','${body.dateEvent}','${body.description}','${body.emailConfirmed}','${body.eventID}');`
+        const sql = `INSERT INTO schedule_event_confirmed(nameEvent, namePerson, dateEvent, description ,emailConfirmed, eventID, eventIDEncrypt) VALUES ('${body.nameEvent}','${body.namePerson}','${body.dateEvent}','${body.description}','${body.emailConfirmed}','${body.eventID}','${body.eventIDEncrypt}');`
         return query(sql)
     }
     selectIdEvent() {
@@ -38,6 +46,10 @@ class Events{
         return query(sql)
     }
     showWhoIsConfirmedById(id_event) {
+        const sql = `SELECT * FROM schedule_event_confirmed WHERE eventID = '${id_event}';`
+        return query(sql)
+    }
+    showWhoIsConfirmedByIdEncrypt(id_event) {
         const sql = `SELECT * FROM schedule_event_confirmed WHERE eventID = '${id_event}';`
         return query(sql)
     }

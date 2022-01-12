@@ -1,4 +1,4 @@
-const conexao = require('../infrastructure/conexao')
+
 const repositorio = require('../repositories/cadastro')
 
 class Cadastro{

@@ -63,9 +63,13 @@
         },
         methods:{
             show(index){
-                this.$router.push(`/showParticipants/${this.allEvents[index].id_schedule}`)
+                console.log(this.allEvents[index].idEncrypt)
+                this.$router.push(`/show-participants/${this.allEvents[index].idEncrypt}`)
+           
+                // this.$http.get(`/show-participants/${id}`)
+                console.log(this.allEvents)
                 console.log(index)
-                console.log(this.allEvents[index])
+                console.log(this.allEvents[index].idEncrypt)
             },
             showEvents(){
 

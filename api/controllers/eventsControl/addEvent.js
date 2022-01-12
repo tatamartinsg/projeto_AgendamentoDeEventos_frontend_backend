@@ -1,6 +1,7 @@
 const EventsBD = require('../../repositories/events')
 const Cadastro = require('../../repositories/cadastro.js')
 const Email = require('../../config/email.js')
+const EncryptID = require('../encryptID/EncryptID')
 
 module.exports = function AddEvent(req, res) {
 
@@ -11,6 +12,10 @@ module.exports = function AddEvent(req, res) {
                 EventsBD.selectIdEvent()
                     .then(select => {
                         const lastId = select[0].id_schedule
+
+                        const link = EncryptID(lastId)
+                        EventsBD.addIdEncrypt(lastId,link)
+                        console.log(link)
                         Cadastro.selecionaUsuarios()
                             .then(result => {
                           
@@ -29,6 +34,8 @@ module.exports = function AddEvent(req, res) {
                                     }
                                     
                                 }
+                                console.log('URLLLLLLLLLLLLLLLLLLLLL')
+                                const url = `http://localhost:8080/confirmevent/${link}`
                                 const message = `
                                     *EMAIL AUTOMATICO, POR FAVOR NÃO RESPONDA*
                                     
@@ -37,9 +44,8 @@ module.exports = function AddEvent(req, res) {
                                     -> Data do evento: ${req.body.dateEvent}
                                     -> Descrição do evento: ${req.body.description}
                                     -> Please confirm your participation on this link bellow:
+                                    ${url}
                                 `
-                                console.log('URLLLLLLLLLLLLLLLLLLLLL')
-                                const url = `http://localhost:8080/confirmevent/${lastId}`
                                 console.log(url)
                                 // Email.sendEmail(message, AllEmails)
                                 // Email.sendEmail(res,req.body)
@@ -51,8 +57,7 @@ module.exports = function AddEvent(req, res) {
                             console.log(error)
                             return res.status(400).json(error)
                         })
-                    })
-              
+                    })  
             }
             else {
                 return res.status(200).json({body:req.body,message: "we didn't notificate"})

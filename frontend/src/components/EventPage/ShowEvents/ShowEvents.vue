@@ -36,11 +36,14 @@ export default{
     data(){
         return{
             events: [],
-            infoEvents: []
+            infoEvents: [],
+            params: ''
         }
     },
     created(){
-        this.$http.get(`/showParticipants/${this.$route.params.id}`)
+        console.log(this.$route.params.secretKey)
+        this.params = this.$route.params.secretKey
+        this.$http.get(`/show-participants/${this.params}`)
             .then( response => {
                 console.log(response)
                 this.events = response.data.response

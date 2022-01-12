@@ -1,16 +1,10 @@
 const Select = require('../../models/selectDB')
 const SelectDB = require('../../models/selectDB')
-const { EncryptPassword } = require('../encryptPassword')
-const Email = require('../../config/email.js')
+const { EncryptPassword } = require('../encryptPassword/encryptPassword')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const generateToken = require('../../config/generateToken')
 // const Email = require('../../config/email')
-module.exports = function postSignUp(req,res) {
-    const body = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    }
+module.exports = function postSignUp(req,res,body) {
     let tamanho_email = body.email.length
     let tamanho_senha = body.password.length
     let aux;
@@ -43,23 +37,13 @@ module.exports = function postSignUp(req,res) {
                                         return res.status(401).send({message: 'Falha na autenticação'})
                                     }
                                     if(result){
-                                        console.log(resultados)
-                                        const tokenKEY = (process.env.JWT_KEY)
-                                        console.log('AAAAAAAAAAAAAAAAAAAAAAA')
-                                        const token = jwt.sign({
-                                            name: resultados[0].name,
-                                            email: resultados[0].email,
-                                            _idUser: resultados[0].id
-                                        },tokenKEY,{
-                                            expiresIn: "2000000"
-                                        })
+                                        const token = generateToken(resultados[0])
 
                                         const url = `http://localhost:8080/confirmation/${token}`
                                         console.log(url)
                                         const message = `Please click this email to confirm your email: <a href="${url}">${url}</a>`
                                         const emailSent = [resultados[0].email]
-                                        console.log(emailSent)
-                                        
+                                                           
                                         try {
                                             // if (Email.sendEmail(message, emailSent)) {
                                             //      res.status(200).json({message: "sucessfull", token:token})
@@ -69,15 +53,12 @@ module.exports = function postSignUp(req,res) {
                                         catch (err) {
                                             console.log('deu erro', err)
                                             res.status(400).json({message: "error sending the email", token:token})
-                                        } 
-                                           
-                                       
-                                     
+                                        }                                              
                                     }
                                     })
                                 }
-                            }).catch(err => console.log(err))
-                                
+                            })
+                            .catch(err => console.log(err))                               
                     }
                 })
              

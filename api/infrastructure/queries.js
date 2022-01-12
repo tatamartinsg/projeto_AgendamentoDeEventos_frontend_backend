@@ -6,8 +6,8 @@ const executaQuery = (query, parametros = '') => {
             if(erros){
                 reject(erros)
             }else{
-                console.log('Resultado query:')
-                console.log(resultados,parametros)
+                // console.log('Resultado query:')
+                // console.log(resultados,parametros)
                 resolve(resultados)
             }
         })

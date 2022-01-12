@@ -15,7 +15,7 @@ module.exports = app => {
     })
     app.get('/allEvents/:id', async(req,res)=>{
         const getId = req.params.id
-        console.log(getId)
+
         EventsBD.getEvents(getId)
             .then(response => {
                 console.log(response)
@@ -49,9 +49,7 @@ module.exports = app => {
     })
 
     app.get('/confirmevent/:id', (req, res) => {
-        console.log('req', req.params.id)
-        console.log('uai')
-        EventsBD.getEventsById(req.params.id)
+        EventsBD.getEventsByIdEncrypt(req.params.id)
             .then(response => {
                 console.log('response:',response)
                 res.status(200).json(response)
@@ -62,9 +60,6 @@ module.exports = app => {
     })
 
     app.post('/postEventConfirmed', (req, res) => {
-        console.log("entrou post")
-        console.log(req.body)
-        
         EventsBD.addPersonWhoIsConfirmed(req.body)
             .then(response => {
                 console.log(response)
@@ -75,21 +70,22 @@ module.exports = app => {
             })
     })
 
-    app.get('/showParticipants/:id', (req, res) => {
-        console.log("entrou get", req.params)
-        EventsBD.showWhoIsConfirmedById(req.params.id)
-            .then(response => {
-                console.log(response)
-                res.status(200).json({response})
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+    app.get('/show-participants/:secretKey', (req, res) => {
+        console.log("entrou")
+        console.log(req.params)
+        console.log('query', req.query)
+        res.status(400).json(req.params)
+        // EventsBD.showWhoIsConfirmedByIdEncrypt(req.params.id)
+        //     .then(response => {
+        //         console.log(response)
+        //         res.status(200).json({response})
+        //     })
+        //     .catch((error) => {
+        //         console.log(error)
+        //     })
     })
 
     app.get('/emailconfirmed/:email', (req, res) => {
-        console.log("entrou email confirmed")
-        console.log(req.params)
         EventsBD.showEventsUserConfirmed(req.params.email)
             .then(response => {
                 console.log(response.length)
@@ -103,8 +99,6 @@ module.exports = app => {
     })
 
     app.delete('/delete-participation-event/:email/:id', (req, res) => {
-        console.log("entrou delete event")
-        console.log(req.params)
         const user_info = req.params
         EventsBD.deleteUserfromEvent(user_info)
             .then(response => {

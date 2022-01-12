@@ -53,7 +53,7 @@ import provedor from '../../../store/index'
                         description: this.response.data[0].description,
                         emailConfirmed: response.data[0].email,
                         namePerson: response.data[0].name,
-
+                        eventIDEncrypt: this.response.data[0].idEncrypt
                     }
                     this.$http.post('/postEventConfirmed', body)
                            .then(res => {
