@@ -1,6 +1,6 @@
  //senha precisa ter pelo menos 5 caracteres, 1 letra maiuscula, 1 letra minuscula e 1 numero
 
- const ValidPassword = (passwordValue) => {
+module.exports = function ValidPassword(passwordValue){
     const tamanhoSenha = passwordValue.length
     if (tamanhoSenha < 5) {
         return 0;
@@ -37,5 +37,3 @@
         
     }
 }
-
-module.export = { ValidPassword }

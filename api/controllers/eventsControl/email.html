@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="text-align: center; border: solid 1px black; background-color: rgb(255, 255, 255); width: 80%; margin: 0 auto;">
+        
+        <p>Estamos notificando que um novo evento foi agendado, segue as informações:</p>
+        <div style="width: 50%; text-align: left; margin: 0 auto;">
+        <ul >
+            <li style="padding: 8px;">Nome do evento: ${req.body.nameEvent}</li>
+            <li style="padding: 8px;">Data do evento: ${req.body.dateEvent}</li>
+            <li style="padding: 8px;">Descrição do evento: ${req.body.description}</li>
+            <li style="padding: 8px;">Please confirm your participation on this link bellow: <a href="http://localhost:8080/confirmevent/$2b$05$dC5bXwyLRTlklhqnS0q62u7E9eC4gwm0Tr6yWKRwSACqeii7eQvKm">Clique aqui</a></li>
+        </ul>
+        </div>
+        <p style="font-size: 14px;">*EMAIL AUTOMÁTICO, POR FAVOR, NÃO RESPONDA*</p>
+    </div>
+</body>
+</html>

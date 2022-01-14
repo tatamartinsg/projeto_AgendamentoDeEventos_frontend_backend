@@ -32,17 +32,14 @@
                                         </svg>
                                     </button>
                                     <button @dblclick.prevent=" clicoudnv(index)" @click.prevent="clicou(index)" href="#" :class="'button'+index" class="btn btn-dark">{{title_button}}</button>
-                                    <button @click.prevent="show(index)" class="btn btn-primary">Show Participants</button>
+                                    <button @click.prevent="showParticipants(index)" class="btn btn-primary">Show Participants</button>
                                 </div>
                                  
                             </div>
                            
                         </li>
                     </ul>
-                </div>
-
-                
-      
+                </div>    
             </div>
         </div>
     </div>
@@ -57,22 +54,17 @@
                 dates: [],
                 clickOnce: false,
                 hide: false,
-                buttonWasClicked: false,
-                title_button: "Hide Event"
+                title_button: "Hide Event",
+                params: ''
             }
         },
         methods:{
-            show(index){
-                console.log(this.allEvents[index].idEncrypt)
-                this.$router.push(`/show-participants/${this.allEvents[index].idEncrypt}`)
-           
-                // this.$http.get(`/show-participants/${id}`)
-                console.log(this.allEvents)
-                console.log(index)
-                console.log(this.allEvents[index].idEncrypt)
+            showParticipants(index){
+                this.params = this.allEvents[index].idEncrypt
+                this.$router.push(`/show-participants/${this.params}`)
+
             },
             showEvents(){
-
                 if(this.clickOnce === false){
                     this.isActiveshowEvents =! this.isActiveshowEvents
                     this.$http.get(`/allEvents/${provedor.state._idUser}`)
@@ -87,28 +79,15 @@
                             console.log(error)
                         })
                 }
-                // this.clickOnce = true
-                   
-               
             },
             removeEvent(index, id_schedule){
                 if(confirm("Do you want to delete this event?") == true){
                     this.allEvents.splice(index, 1)
                     this.$http.delete(`/eventDelete/${id_schedule}`)
-                        .then(response => {
-                            console.log(response)
-                        })
-                        .catch( error => {
-                            console.log(error)
-                        })
-                    console.log(id_schedule) // id pra buscar e deletar no banco de dados
-                    //manda um post delete
-                }
-                
+                }      
             },
             clicou(index){
                 var aux = -1
-                console.log(index)
                 var pegaEvento = document.querySelector(`.card${index}`)
                 pegaEvento.classList.toggle('hide')
 
@@ -134,7 +113,7 @@
       
     }
 </script>
-<style scoped>
+<style>
 .myevents{
     margin: 40px;
     border: 2px solid rgb(41, 40, 40);
@@ -186,4 +165,5 @@ li{
 .btnremove{
     font-size: 14px;
 }
+
 </style>

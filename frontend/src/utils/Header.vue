@@ -74,7 +74,7 @@
         }
     }
 </script>
-<style scoped>
+<style>
     li a:hover, .dropdown:hover .dropbtn {
         background-color: none;
     }

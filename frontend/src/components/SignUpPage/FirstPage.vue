@@ -193,16 +193,14 @@ export default {
                 if( this.postAxios(classForm)){
                     this.$http.post(`${path}`, this.postAxios(classForm))
                     .then(res =>{
-                        console.log(res.data.token)
-                        console.log(res)
                         let confirm = true
                         this.changeToken(res.data.token)
                         this.loadingConfirmation(confirm)
                     })
                     .catch(error => {
-                        console.error("There was an error!", error);
+                        console.log("There was an error!", error.response);
                         if(error.response.status == 400){
-                            let message = 'Cadastro inválido.'
+                            let message = `${error.response.data.message}`
                             this.alertToastr('warning', message )
                             
                         }

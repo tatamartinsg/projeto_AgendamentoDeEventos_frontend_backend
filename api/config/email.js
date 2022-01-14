@@ -2,8 +2,6 @@ const nodemailer = require('nodemailer')
 
 class Email{
     async sendEmail(message, AllEmails) {
-    
-        console.log(AllEmails[0])
         const sendEmailFixo = 'teste4api@hotmail.com'
     
         const remetente = await nodemailer.createTransport({
@@ -19,7 +17,6 @@ class Email{
                 rejectUnauthorized: false
             }
         })
-        console.log(AllEmails.length)
         for( var i = 0; i < AllEmails.length; i++){
             const emailASerEnviado = {
                 from: `Teste API <${sendEmailFixo}>`,

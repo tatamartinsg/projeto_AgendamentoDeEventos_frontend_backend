@@ -1,8 +1,8 @@
 const repositorio = require('../repositories/select')
 
 class selectBD{
-    selecionaEmail(body){
-        return repositorio.selectEmail(body)
+    verifyEmailDataBase(body){
+        return repositorio.verifyEmailDataBase(body)
     }
 }
 

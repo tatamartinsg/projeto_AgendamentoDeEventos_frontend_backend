@@ -46,11 +46,17 @@ export default{
         this.$http.get(`/show-participants/${this.params}`)
             .then( response => {
                 console.log(response)
+                console.log(response.data.response.length)
+                if(response.data.response.length == 0){
+                    this.$toastr('warning','This page is empty!')
+                    return this.$router.push('../clientes')
+
+                }
                 this.events = response.data.response
-                this.$http.get(`/confirmevent/${this.$route.params.id}`)
+                this.$http.get(`/confirmevent/${this.$route.params.secretKey}`)
                     .then(response2 => {
                         this.infoEvents = response2.data
-                        console.log('', this.infoEvents[0])
+                        console.log('', this.infoEvents[0].response)
                     
                     })
                     .catch( error => {
@@ -68,9 +74,11 @@ export default{
     margin: 0 10%;
     width: 100%;
 } */
-div.card{
-    margin: 0 auto;
-    width: 100%;
+#showEvents{
+    margin: 10%;
+}
+table{
+    margin: 15px;
 }
 .th-name, .th-email{
     width: 50%;
@@ -79,14 +87,17 @@ div.card{
     border: 1px solid rgb(201, 197, 197);
     padding: 8px;
 }
-table{
-      margin: 10px;
-}
+
 .tr-name-email td{
     padding: 10px;
     border: 1px solid rgb(201, 197, 197);
 }
 .card-title{
     font-size: 32px;
+}
+@media only screen and (width: 770px) {
+    body{
+        background-color: brown;
+    }
 }
 </style>

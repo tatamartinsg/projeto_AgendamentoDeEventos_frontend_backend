@@ -42,10 +42,10 @@ import provedor from '../../../store/index'
         },
         methods:{
             confirmParticipation(){
-                alert(provedor.state._idUser)
+         
                 this.$http.get(`http://localhost:3000/all-cadastros/${provedor.state._idUser}`)
                 .then(response => {
-                    console.log(this.response.data[0])
+          
                     const body = {
                         nameEvent: this.response.data[0].nameEvent,
                         eventID: this.response.data[0].id_schedule,
@@ -68,7 +68,10 @@ import provedor from '../../../store/index'
                             console.log(res)
                         })
                         .catch( err => {
-                            console.log(err)
+                            console.log(err.response.data.status == false)
+                            if(err.response.data.status == false){
+                                this.$toastr('warning','You were already confirmed!','Already Confirmed')
+                            }
                         })
                 })
                 .catch( error => {

@@ -7,11 +7,12 @@ module.exports = app => {
         console.log('entrou')
         res.status(200).json({id: req._idUser, message: 'ok'})
     })
-    app.post('/addEvent', async(req,res) => {
+    app.post('/addEvent', (req,res) => {
         if(req.body.nameEvent.length == 0 || req.body.description.length == 0  || req.body.dateEvent.length == 0 ){
             return res.status(400).json({message: 'An input is empty', status: 'empty'})
         }
-        AddEvent(req,res)
+        AddEvent(req, res)
+
     })
     app.get('/allEvents/:id', async(req,res)=>{
         const getId = req.params.id
@@ -49,6 +50,7 @@ module.exports = app => {
     })
 
     app.get('/confirmevent/:id', (req, res) => {
+        console.log(req.query)
         EventsBD.getEventsByIdEncrypt(req.params.id)
             .then(response => {
                 console.log('response:',response)
@@ -59,8 +61,12 @@ module.exports = app => {
             })
     })
 
-    app.post('/postEventConfirmed', (req, res) => {
-        EventsBD.addPersonWhoIsConfirmed(req.body)
+    app.post('/postEventConfirmed', async (req, res) => {
+        const  verify  = await EventsBD.verifyIfPersonIsAlreadyConfirmed(req.body)
+        if (verify.length > 0) {
+            return res.status(400).json({message: 'this person is already confirmed', status:false})
+        }
+        await EventsBD.addPersonWhoIsConfirmed(req.body) 
             .then(response => {
                 console.log(response)
                 res.status(200).json({confirmed: true})
@@ -68,21 +74,24 @@ module.exports = app => {
             .catch((error) => {
                 console.log(error)
             })
+
+        
     })
 
     app.get('/show-participants/:secretKey', (req, res) => {
         console.log("entrou")
         console.log(req.params)
         console.log('query', req.query)
-        res.status(400).json(req.params)
-        // EventsBD.showWhoIsConfirmedByIdEncrypt(req.params.id)
-        //     .then(response => {
-        //         console.log(response)
-        //         res.status(200).json({response})
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //     })
+        // res.status(400).json(req.params)
+        EventsBD.showWhoIsConfirmedByIdEncrypt(req.params.secretKey)
+            .then(response => {
+                console.log(response)
+                res.status(200).json({response})
+            })
+            .catch((error) => {
+                console.log(error)
+                 res.status(400).json(error)
+            })
     })
 
     app.get('/emailconfirmed/:email', (req, res) => {

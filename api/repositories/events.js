@@ -38,8 +38,8 @@ class Events{
         return query(sql,getId) 
     }
     addPersonWhoIsConfirmed(body) {
-        const sql = `INSERT INTO schedule_event_confirmed(nameEvent, namePerson, dateEvent, description ,emailConfirmed, eventID, eventIDEncrypt) VALUES ('${body.nameEvent}','${body.namePerson}','${body.dateEvent}','${body.description}','${body.emailConfirmed}','${body.eventID}','${body.eventIDEncrypt}');`
-        return query(sql)
+        const sql = `INSERT INTO schedule_event_confirmed SET ?`
+        return query(sql, body)
     }
     selectIdEvent() {
         const sql = `SELECT * FROM schedule_event WHERE id_schedule = LAST_INSERT_ID()`
@@ -50,11 +50,16 @@ class Events{
         return query(sql)
     }
     showWhoIsConfirmedByIdEncrypt(id_event) {
-        const sql = `SELECT * FROM schedule_event_confirmed WHERE eventID = '${id_event}';`
+        console.log(id_event)
+        const sql = `SELECT * FROM schedule_event_confirmed WHERE eventIDEncrypt = '${id_event}';`
         return query(sql)
     }
     showEventsUserConfirmed(user) {
         const sql = `SELECT * FROM schedule_event_confirmed WHERE emailConfirmed  = '${user}';`
+        return query(sql)
+    }
+    verifyIfPersonIsAlreadyConfirmed(body) {
+        const sql = `SELECT * FROM schedule_event_confirmed WHERE emailConfirmed  = '${body.emailConfirmed}' AND eventIDEncrypt = '${body.eventIDEncrypt}';`
         return query(sql)
     }
 }

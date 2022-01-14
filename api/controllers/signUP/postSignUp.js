@@ -1,75 +1,28 @@
 const Select = require('../../models/selectDB')
-const SelectDB = require('../../models/selectDB')
 const { EncryptPassword } = require('../encryptPassword/encryptPassword')
-const bcrypt = require('bcrypt')
-const generateToken = require('../../config/generateToken')
-// const Email = require('../../config/email')
-module.exports = function postSignUp(req,res,body) {
-    let tamanho_email = body.email.length
-    let tamanho_senha = body.password.length
-    let aux;
+const bcryptCompare = require('../bcryptCompare/bcryptCompare')
+const ValidPassword = require('../../validations/validPassword/ValidPassword')
+const ValidEmail = require('../../validations/validEmail/validEmail')
+const { ValidName } = require('../../validations/ValidName/ValidName')
 
-    if (tamanho_email >= 12){
-        if(tamanho_senha >= 5){
-            Select.selecionaEmail(body)
-                .then(resultados => {
-                    for (var i=0; i<resultados.length; i++){
-                        if(resultados[i].email == body.email){
-                            aux = 0
-                        }
-                        else{
-                            aux = 1 
-                        }
-                    }
-                    if(aux == 0){
-                        console.log("Já existe esse email cadastrado!")
-                        res.status(400).json({message: 'Email existente!'})
-                    }
-                    else{
-                        EncryptPassword(body)
-                    
-                        SelectDB.selecionaEmail(body)
-                            .then(resultados => {
-                            console.log('results',resultados)
-                            if (resultados.length > 0){
-                                bcrypt.compare(body.password, resultados[0].password,(error,result)=> {
-                                    if(error){
-                                        return res.status(401).send({message: 'Falha na autenticação'})
-                                    }
-                                    if(result){
-                                        const token = generateToken(resultados[0])
+module.exports = async function postSignUp(req,res,body) {
+    if (ValidName(body.name) == 0) {
+        return res.status(400).json({message:"Name invalid"})
+    }
+    if (ValidEmail(body.email) == 0) {
+        return res.status(400).json({message:"Email invalid"})
+    }
+    if (ValidPassword(body.password) == 0) {
+        return res.status(400).json({message:"Your password needs at least 1 uppercase, 1 number, 1 lowercase and 5 caracters", pass: false})
+    }
 
-                                        const url = `http://localhost:8080/confirmation/${token}`
-                                        console.log(url)
-                                        const message = `Please click this email to confirm your email: <a href="${url}">${url}</a>`
-                                        const emailSent = [resultados[0].email]
-                                                           
-                                        try {
-                                            // if (Email.sendEmail(message, emailSent)) {
-                                            //      res.status(200).json({message: "sucessfull", token:token})
-                                            // }
-                                            res.status(200).json({message: "sucessfull", token:token})
-                                        }
-                                        catch (err) {
-                                            console.log('deu erro', err)
-                                            res.status(400).json({message: "error sending the email", token:token})
-                                        }                                              
-                                    }
-                                    })
-                                }
-                            })
-                            .catch(err => console.log(err))                               
-                    }
-                })
-             
-        }
-        else{
-            console.log("Caracteres na senha são insuficientes (menor que 5)")
-            res.status(400).json({message:"Caracteres na SENHA são insuficientes (menor que 5)"})
-        }
+    const resultados = await Select.verifyEmailDataBase(body)
+    if (resultados.length > 0) {
+        console.log("Já existe esse email cadastrado!")
+        return res.status(400).json({message: 'Email existente!'})
     }
-    else{
-        console.log("Caracteres no email são insuficientes (menor que 12)")
-        res.status(400).json({message:"Email inválido!", erro: 'Caracteres no email são insuficientes (menor que 12)'})
-    }
+    EncryptPassword(body)
+    const resultados2 = await Select.verifyEmailDataBase(body)
+    bcryptCompare(res, body, resultados2, false)
+        
 }

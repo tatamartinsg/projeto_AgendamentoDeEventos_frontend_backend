@@ -84,20 +84,16 @@ import { logOutMixin } from '@/mixins.js'
         mounted(){
             this.$http.get('clientes')
                 .then(response => {
-                    console.log('Entrou', response)
                     if(response.data.message == 'token invalid'){
                         alert("Token invalido")
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data)
                     if(error.response.data.message == 'token invalid'){
                         alert('your token is not usefull anymore, please do a log in again')
                         this.$store.commit('LOGOUT_USER')
                     }
                 })
-            console.log(provedor.state._idUser)
-            console.log(EventGetDate)
         },  
         methods:{
             addEvent(){
@@ -118,44 +114,15 @@ import { logOutMixin } from '@/mixins.js'
                 }
                 return objeto
             },
-            // clicou(){
-            //      if(this.passwordConfirm){
-            //         // var senha = prompt("Confirme sua senha, por favor")
-            //         // console.log(senha)
-            //         // let formEvent = '.formEvent'
-            //         console.log(this.passwordConfirm) //PELO AMOR DE DEUS DPOS DA UM JEITO DE VERIFICAR SE ISSO TA CERTO
-            //         this.$http.post('/addEvent', this.formParams(this.passwordConfirm))
-            //         .then((response) =>{
-            //             console.log(response.data.check)
-            //             if(response.data.check == true){
-            //                 this.sendEmailAoBackEnd(response.data)
-            //             }
-            //         })
-            //         .catch((error) => {
-            //             console.log(error)
-            //         })
-            //         setTimeout(() => {
-            //             this.confirm = true
-            //         },1000 )
-                    
-            //     }
-            // },
             submitEvent(){
                 this.confirm =! this.confirm
                 
                 this.$http.post('/addEvent', this.formParams())
-                    .then((response) =>{
+                    .then(() =>{
                         this.$toastr('success','Event was added with successful','Event Added')
-                        console.log(response)
                         document.querySelector('.formEvent').reset();
-                       
-
-                        // if(response.data.check == true){
-                        //     this.sendEmailAoBackEnd(response.data)
-                        // }
                     })
                     .catch((error) => {
-                        console.log(error.response)
                         if(error.response.data.status == 'empty'){
                             this.$toastr('warning',error.response.data.message,'Invalid Event')
                         }
@@ -164,14 +131,6 @@ import { logOutMixin } from '@/mixins.js'
                         this.confirm = true
                     },1000 )
             },
-            // clearForm(){
-            //     this.name = ''
-            //     this.description = ''
-            //     this.check = ''
-            // }
-            // sendEmailAoBackEnd(){
-            //     this.$http.po
-            // }
         }
     
     }

@@ -1,7 +1,7 @@
 const query = require('../infrastructure/queries')
 
 class Select{
-    selectEmail(body){
+    verifyEmailDataBase(body){
         const sql = `SELECT * FROM signUP_users WHERE email = '${body.email}';`
         return query(sql,body)
     }

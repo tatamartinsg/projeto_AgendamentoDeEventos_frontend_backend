@@ -60,8 +60,6 @@
         methods:{
             show(index){
                 this.$router.push(`/showParticipants/${this.allEvents[index].id_schedule}`)
-                console.log(index)
-                console.log(this.allEvents[index])
             },
             showEvents(){
                 this.isActiveshowEvents =! this.isActiveshowEvents
@@ -70,51 +68,40 @@
                         let email_user = response.data[0].email
                         this.$http.get(`/emailconfirmed/${email_user}`)
                             .then(response => {
-                                console.log(response.data.response.length)
-                                console.log(response.length)
                                 this.allEventsConfirmed = response.data.response
-                                console.log(this.allEventsConfirmed)
                                 if(response.data.response.length == 0){
                                     return this.$toastr('warning', 'There is no events that you confirmed yet', 'Events confirmed are empty' )
                                 }
                                 
                             })
                             .catch(error => {
-                                console.log(error.response.data.message)
                                 if(error.response.data.message == 'empty'){
                                     this.$toastr('warning', 'There is no events that you confirmed yet', 'Events confirmed are empty' )
                                 }
                             })
         
                     })
-                    .catch( error => {
-                        console.log(error.response.data.message)
+                    .catch( () => {
+                        this.$toastr('error', 'You are not logged in', 'Error')
                     })
-                // this.clickOnce = true
-                   
-               
+                        
             },
-            cancelParticipation(index, id_schedule){
+            cancelParticipation(index){
                 if(confirm("Do you want to desconfirm your participation on this event?") == true){
-                    
-                    console.log('ok', index,id_schedule)
                     let email_user_participation = this.allEventsConfirmed[0].emailConfirmed
                     let id_event = this.allEventsConfirmed[0].eventID
                     this.$http.delete(`/delete-participation-event/${email_user_participation}/${id_event}`)
-                        .then(respostaDelete => {
-                            console.log(respostaDelete)
+                        .then(() => {
                             this.allEventsConfirmed.splice(index, 1)
                         })
                         .catch(errDelete => {
                             console.log(errDelete.response)
                         })
-                    console.log(email_user_participation, id_event)
                 }
                 
             },
             clicou(index){
                 var aux = -1
-                console.log(index)
                 var pegaEvento = document.querySelector(`.card${index}`)
                 pegaEvento.classList.toggle('hide')
 
