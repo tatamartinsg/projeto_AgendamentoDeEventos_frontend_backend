@@ -23,6 +23,6 @@ module.exports = async function postSignUp(req,res,body) {
     }
     EncryptPassword(body)
     const resultados2 = await Select.verifyEmailDataBase(body)
-    bcryptCompare(res, body, resultados2, false)
+    bcryptCompare(res, body, resultados2, true) //change to false to not send the email
         
 }
