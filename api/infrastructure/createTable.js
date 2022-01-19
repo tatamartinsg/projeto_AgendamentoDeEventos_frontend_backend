@@ -9,7 +9,7 @@ class CreateTable{
         this.createTableDBScheduleEventsConfirmed()
     }
     createTableDB(){
-        const sql = 'CREATE TABLE IF NOT EXISTS signUP_users (id int NOT NULL AUTO_INCREMENT, name varchar(255), email varchar(255) NOT NULL, password varchar(255) NOT NULL, confirmed varchar(5), PRIMARY KEY(id));'
+        const sql = 'CREATE TABLE IF NOT EXISTS signUP_users (id int NOT NULL AUTO_INCREMENT, name varchar(255), email varchar(255) NOT NULL, password varchar(255) NOT NULL, confirmed varchar(5), idUserEncrypt varchar(255) , PRIMARY KEY(id));'
         return query(sql)
     }
     createTableDBSchedule(){

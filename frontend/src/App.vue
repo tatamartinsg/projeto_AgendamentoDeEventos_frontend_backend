@@ -34,4 +34,7 @@ export default {
   #app{
     margin-top: 8%;
   }
+  .btn{
+    margin-top: 0;
+  }
 </style>

@@ -9,7 +9,7 @@ function EncryptPassword(body){
         name: body.name,
         email: body.email,
         password: senhaParaSalvar,
-        confirmed: 'false'
+        confirmed: 'false',
     }
     return Cadastro.insertCadastro(body_with_hash)
 }

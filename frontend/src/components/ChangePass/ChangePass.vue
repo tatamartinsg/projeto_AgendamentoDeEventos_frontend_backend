@@ -5,22 +5,44 @@
         <section class="changePass">
             <div class="form-group">
                 <h1>Change your password</h1>
-                <small>THE FUNCTION IS NOT WORKING YET</small>
+                <!-- <small>THE FUNCTION IS NOT WORKING YET</small> -->
                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                <button class="btn btn-primary sendEmail">Send Email</button>
+                <button @click.prevent="submitEmail4ChangePass()" class="btn btn-primary sendEmail">Send Email</button>
             </div>
         </section>
    
     </div>
 </template>
 <script>
-
+import { ValidEmail } from '../../js/ValidEmail';
 export default{
-    // components:{
-    //     'my-modal2': Modal2
-    // }
+    data(){
+        return{
+            email:""
+        }
+    },
+    methods:{
+        submitEmail4ChangePass(){
+            if(ValidEmail(this.email) == 0){
+                return this.$toastr('warning', 'There is something wrong with your email, please write again in the format: email@hotmail.com','Wrong Email')
+            }
+            this.$http.post('/change-password', {email: this.email})
+                .then(response => {
+                    console.log('results',response)
+                    this.$toastr('success','Email sent with successfull', 'Email sent')
+                    setTimeout(() => {
+                        this.$router.push('/')
+                    },2000)
+                    
+                })
+                .catch(err => {
+                    console.log(err)
+                    this.$toastr('warning', 'There is something wrong with your email, please write again in the format: email@hotmail.com','Wrong Email')
+                })
+        }
+    }
 }
 </script>
 
@@ -39,6 +61,7 @@ body{
 #exampleInputEmail1{
     margin: 0 auto;
     width: 50%;
+    margin-bottom: 10px;
 }
 .form-group h1{
     color: rgb(0, 0, 0);

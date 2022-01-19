@@ -122,5 +122,51 @@
        text-align: right;
        color: white;
    }
+   @media (min-width: 320px){
+       .navbar-expand-md {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+        flex-flow: row nowrap;
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+    }
+    .navbar-expand-md .navbar-collapse {
+        display: -webkit-box!important;
+        display: -ms-flexbox!important;
+        display: flex!important;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+    }
+    .navbar-expand-md .navbar-nav {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+    }
+    
+   }
+   @media screen and (max-width:760px){
+    .nav-item{
+        font-size: 13px;
+        padding: 8px;
+    }
+    .nav-item a{
+        font-size: 16px;
+    }
+    .home{
+        padding-top: 8px;
+    }
+    .div-third{
+        height: 50px;
+    }
+   }
+   @media screen and (max-width:670px){
+       .div-third{
+            height: 40px;
+        }
+   }
+    
 
 </style>

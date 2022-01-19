@@ -2,7 +2,10 @@
     <div>
         <div class="myevents">
             <div class="div-myEvents">
-                <h2 class="event-title">Events you're confirmed</h2>
+                <div class="div-h2">
+                    <h2 class="event-title">Events you're confirmed</h2>
+                </div>
+                
                 <div class="div-showEvents">
                     <button @click="showEvents()" class="showEvents btn btn-success">Show Events</button>
                 </div>
@@ -129,12 +132,13 @@
 </script>
 <style scoped>
 .myevents{
-    margin: 40px;
+    margin: 2%;
     border: 2px solid rgb(41, 40, 40);
     box-shadow: 3px 4px 10px rgb(179, 179, 179);
     border-radius: 10px;
     background-color: #ffffff;
     height: 100%;
+    min-width: 600px;
 }
 .div-myEvents{
     display: flex;
@@ -151,12 +155,6 @@
     margin: 0 auto;
     width: auto;
 }
-.div-showEvents button{
-    /* width: 200px; */
-    margin-left: 120%;
-    margin-top: 0;
-}
-
 .isActiveshowEvents{
     display: none;
 }
@@ -175,5 +173,14 @@ li{
 }
 .btnremove{
     font-size: 14px;
+}
+.div-h2{
+    width: 50%;
+}
+@media screen and (max-width:620px){
+    .myevents{
+        margin: 0;
+        margin-left: 2px;
+    }
 }
 </style>

@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 class Email{
     async sendEmail(message, AllEmails) {
-        const sendEmailFixo = 'teste4api@hotmail.com'
+        const sendEmailFixo = process.env.EMAIL_USER
     
         const remetente = await nodemailer.createTransport({
             host:'smtp.ethereal.email', // smtp.live.com
@@ -11,7 +11,7 @@ class Email{
             secure: false,
             auth: {
                 user: sendEmailFixo,
-                pass: 'api4teste'
+                pass: process.env.EMAIL_PASSWORD
             },
             tls: {
                 rejectUnauthorized: false

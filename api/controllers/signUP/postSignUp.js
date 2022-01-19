@@ -4,6 +4,8 @@ const bcryptCompare = require('../bcryptCompare/bcryptCompare')
 const ValidPassword = require('../../validations/validPassword/ValidPassword')
 const ValidEmail = require('../../validations/validEmail/validEmail')
 const { ValidName } = require('../../validations/ValidName/ValidName')
+const EncryptID = require('../encryptID/EncryptID')
+const Cadastro = require('../../repositories/cadastro')
 
 module.exports = async function postSignUp(req,res,body) {
     if (ValidName(body.name) == 0) {
@@ -22,7 +24,16 @@ module.exports = async function postSignUp(req,res,body) {
         return res.status(400).json({message: 'Email existente!'})
     }
     EncryptPassword(body)
+
     const resultados2 = await Select.verifyEmailDataBase(body)
-    bcryptCompare(res, body, resultados2, true) //change to false to not send the email
-        
+    const idEncryptado = EncryptID(resultados2[0].id)
+    
+    Cadastro.addIDEncrypt(idEncryptado, resultados2[0].id)
+        .then(ok => {   
+            bcryptCompare(res, body, resultados2, false) //change to false to not send the email
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
 }

@@ -43,5 +43,5 @@ module.exports = async function sendEmail4event(req, res,encryptaID) {
     `
     console.log(AllEmails[0])
     Email.sendEmail(message, AllEmails) 
-    return res.status(200).json(req.body)
+    return res.status(200).json({status: true, message: "We notificate your events to others"})
 }

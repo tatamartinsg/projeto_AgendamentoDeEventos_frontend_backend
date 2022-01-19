@@ -2,7 +2,10 @@
     <div>
         <div id="mySchedule">
             <div class="div-mySchedule">
-                <h1 class="schedule-title">My Schedule</h1>
+                <div class="div-myschedule">
+                    <h1 class="schedule-title">My Schedule</h1>
+                </div>
+                
                 <div class="div-addevent">
                     <button @click="addEvent()" class="btn btn-dark">Add Event</button>
                 </div>
@@ -48,7 +51,7 @@
                                 <label class="form-check-label" for="exampleCheck1">Invite other users to the event</label>
                             </div>
                         </div>
-                        <div>
+                        <div class="div-button">
                             <button v-on:click.prevent="submitEvent()" class="addEventSubmit btn btn-success">Submit Event</button>
                         </div>
                         
@@ -135,7 +138,7 @@ import { logOutMixin } from '@/mixins.js'
     
     }
 </script>
-<style scoped>
+<style >
 button{
     margin: 0;
 }
@@ -152,6 +155,7 @@ button{
     display: flex;
     margin: 40px;
     margin-bottom: 20px;
+    margin-top: 10%;
 }
 .schedule-title,.myevent-title{
     color: rgb(0, 0, 0);
@@ -162,10 +166,13 @@ button{
 .div-addevent{
     justify-content: right;
     margin: 0 auto;
+    width: 50%;
+    text-align: right;
+    margin-right: 2%;
 }
 .div-addevent button{
     width: 200px;
-    margin-left: 100%;
+    margin: 0 auto;
 }
 /* .myevent-title{
     font-weight: bold;
@@ -175,11 +182,12 @@ button{
     box-shadow: 3px 4px 10px rgb(179, 179, 179);
     border-radius: 10px;
     padding: 10px;
-    margin: 40px;
+    margin: 2%;
     background-color: #ffffff;
     width: 95%;
     color: rgb(10, 10, 10);
     font-weight: bold;
+    min-width: 600px;
 }
 
 .input-name{
@@ -207,9 +215,60 @@ button{
     padding: 0;
  }
  .addEventSubmit {
-     margin-right: 20px;
+     /* margin-right: 20px; */
+     margin-top: 5px;
  }
  .confirm{
      display: none;
+ }
+ .formEvent{
+     min-width: 580px;
+ }
+ .div-button{
+     padding: 5px;
+ }
+ .div-myschedule{
+     width: 50%;
+ }
+ @media screen and (max-width: 810px){
+     .form-check-label{
+         padding: 5px;
+     }
+     .addEventSubmit{
+         font-size: 12px;
+     }
+ }
+  @media screen and (max-width: 770px){
+     .form-check-label{
+         padding: 5px;
+         font-size: 13px;
+     }
+     .showEvents{
+         margin: 0;
+     }
+ }
+   @media screen and (max-width: 675px){
+     .form-check-label{
+         padding: 5px;
+         font-size: 12px;
+     }
+ }
+ @media screen and (max-width: 620px){
+    #addEvent{
+        margin: 0;
+        margin-left: 2px;
+        margin-bottom: 1%;
+    }
+ }
+ @media screen and (max-width:580px) {
+     .input-name {
+         width: 65%;
+     }
+     .div-myschedule h1{
+         font-size: 37px;
+     }
+     .div-myEvents{
+         margin: 2%;
+     }
  }
 </style>

@@ -34,6 +34,15 @@ export const routes = [
       props: true
   },
     {
+      path: '/changepass/:id',
+      name: 'changepassID',
+      component: () => import('./src/components/ChangePass/ChangePassID.vue'),
+      meta:{
+            publica: true
+      },
+      props: true
+  },
+    {
       path: '/confirmevent/:id',
       name: 'confirmevent',
       component: () => import('./src/components/EventPage/ConfirmEvent/ConfirmEvent.vue'),

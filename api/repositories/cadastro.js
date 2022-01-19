@@ -13,6 +13,10 @@ class Cadastro{
         const sql = `INSERT INTO signUP_users SET ?;`
         return query(sql,body)
     }
+    addIDEncrypt(idEncrypt,idBanco) {
+        const sql = `UPDATE signUP_users SET idUserEncrypt = '${idEncrypt}' WHERE id = '${idBanco}';`
+        return query(sql)
+    }
     deletaUsers(id){
         const sql = `DELETE FROM signUP_users WHERE id = '${id}';`
         return query(sql)
